@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Hello World!</title>
+	<link rel="stylesheet" type="text/css" href="node_modules/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+<div data-module="pattern-list">
+	<div>
+		<button class="pull-left" data-type="add-btn"><i class="fa fa-step-backward"></i></button>
+		<button class="pull-right" data-type="add-btn"><i class="fa fa-plus"></i></button>
+		<button class="pull-right" data-type="remove-btn"><i class="fa fa-minus"></i></button>
+		<button class="pull-right" data-type="copy-btn"><i class="fa fa-copy"></i></button>
+	</div>
+	<select multiple></select>
+</div>
+<div data-module="transport">
+	<label>BPM:</label><input type="text" />
+	<button class="pull-left" data-type="play-btn"><i class="fa fa-play"></i></button>
+	<button class="pull-left" data-type="play-loop-btn"><i class="fa fa-refresh"></i></button>
+</div>
+<script type="text/javascript">
+	var Box = require('t3js'),
+		jQuery = require('jquery'),
+		$ = require('jquery'),
+		bootstrap = require('bootstrap');
+
+	Box.Application.addModule('pattern-list', require('./modules/pattern-list'));
+	Box.Application.addService('pattern', require('./services/pattern'));
+	Box.Application.init();
+</script>
+</body>
+</html>

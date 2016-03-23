@@ -1,0 +1,15 @@
+body {
+    margin:0;
+    padding:0;
+}
+
+[data-module="pattern-list"] {
+    background-color: #ddd;
+    min-width: 150px;
+    float: right;
+}
+
+[data-module="pattern-list"] select {
+    border: none;
+    width: 100%;
+}

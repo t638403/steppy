@@ -1,0 +1,14 @@
+{
+  "name": "t3js-test",
+  "version": "0.0.1",
+  "main": "main.js",
+  "devDependencies": {},
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "electron-prebuilt": "^0.37.2",
+    "font-awesome": "^4.5.0",
+    "jquery": "^2.2.2",
+    "sqlite3": "^3.1.2",
+    "t3js": "^2.3.0"
+  }
+}
