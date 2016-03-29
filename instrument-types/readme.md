@@ -14,7 +14,7 @@ Some info on the instrument type entity.
 8. **nrpn** (optional) - An array containing NRPN config objects (See below)
 
 **Example:**
-```json
+```
 {
   "id": "56f95572c5af6215adfdbc45",
   "entity": "instrument-type",
