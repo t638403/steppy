@@ -1,0 +1,60 @@
+[data-module="grid"] {    
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 500px;
+    height: 500px;
+	overflow-y: scroll;
+	overflow-x: scroll;
+	background-color: #ddd;
+}
+
+[data-type="grid"] {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 800px;
+    height: 600px;
+	background-color: white;
+    background-image: url('./piano.png');
+}
+
+[data-type="grid"].mapped-keys {
+	background-image: url('./mapped.png');
+}
+
+[data-type="grid"] [data-type="note"] {
+    position: absolute;
+    background-color: #008eff;
+    width: 50px;
+    height: 25px;
+    margin:0;
+    padding:0;
+}
+
+[data-type="grid"] [data-type="note"] .note-inner {
+    height: 21px;
+    border: 2px solid rgba(255,255,255,.2);
+    border-right-width: 0;
+}
+
+[data-type="grid"] [data-type="note"] .right-resize-handle {
+    float: right;
+    width: 2px;
+    height: 21px;
+    cursor: col-resize;
+    border: 2px solid rgba(255,255,255,.2);
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+[data-type="grid"] [data-type="note"].selected {
+    background-color: #004ec8; 
+}
+
+
+[data-type="grid"] .selection {
+    position: absolute;
+    border: 1px dotted black;
+    z-index: 99;
+}

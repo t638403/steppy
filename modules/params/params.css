@@ -1,0 +1,40 @@
+[data-module="params"] {
+	position: absolute;
+	background-color: #ddd;
+	top: 0;
+	left: 0;
+	width: 850px;
+	height: 215px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+
+[data-module="params"] [data-type="params"] {
+	height: 200px;
+	/* A little padding to make up for scrollbar of grid */
+	padding-right: 15px;
+}
+
+[data-module="params"] [data-type="param"] {
+	float: left;
+	height:200px;
+	background: url('./param.png');
+	background-color: white;
+	position: relative;
+}
+
+[data-module="params"] [data-type="param"].empty {
+	background-color: #ddd;
+}
+[data-module="params"] [data-type="remove-param"] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 10px;
+	line-height: 10px;
+	border-width: 2px;
+}
+
+[data-module="params"] [data-type="param"] .inner-param {
+	background-color: rgba(0,0,255,0.5);
+}

@@ -1,0 +1,45 @@
+[data-module="patterns"] {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 200px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	background-color: #ddd;
+}
+
+[data-module="patterns"] .buttons {
+	overflow: auto;
+}
+
+[data-module="patterns"] ul.patterns {
+	position: relative;
+	margin: 0;
+	list-style-type: none;
+	padding: 0;
+}
+
+[data-module="patterns"] ul.patterns [data-type="pattern"] {
+	background-color: white;
+	-webkit-user-select: none;   /* Chrome/Safari/Opera */
+	cursor: pointer;
+}
+
+[data-module="patterns"] ul.patterns [data-type="pattern"] .pattern-inner {
+	border-top: 1px solid #ddd;
+	font-size: 10px;
+	padding-left: 5px;
+	line-height: 20px;
+}
+
+[data-module="patterns"] .patterns [data-type="pattern"].selected {
+	background-color: rgba(0,0, 255, 0.2);
+	cursor: default;
+}
+[data-module="patterns"] [data-type="pattern"] button {
+	font-size: 10px;
+	line-height: 10px;
+	border-width: 2px;
+	float: right;
+	margin-top: 2px;
+}

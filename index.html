@@ -1,185 +1,113 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8">
-	<title>Steppy</title>
-	<link rel="stylesheet" type="text/css" href="node_modules/jquery-ui/themes/base/minified/jquery-ui.min.css">
-	<link rel="stylesheet" type="text/css" href="node_modules/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
-	<link rel="stylesheet" type="text/css" href="css/styles.css">
-</head>
-<body>
+    <head>
+        <title>Steppy</title>
+    </head>
 
-<table data-module="layout">
-	<tr>
-		<td data-module="pattern-list">
-			<ul class="patterns"></ul>
-		</td>
-		<td>
-			<div data-module="pattern-view">
-				<div class="note-table-wrapper">
-					<table class="note-table noselect"></table>
-				</div>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td class="settings">
+    <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="libs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
 
-			<ul class="nav nav-tabs" role="tablist">
-				<li role="presentation" class="active"><a href="#mod-project-settings-1" role="tab" data-toggle="tab">Proj.</a></li>
-				<li role="presentation"><a href="#mod-instrument-settings-1" role="tab" data-toggle="tab">Instr.</a></li>
-				<li role="presentation"><a href="#mod-pattern-settings-1" role="tab" data-toggle="tab">Patt.</a></li>
-			</ul>
+    <link rel="stylesheet" href="modules/patterns/patterns.css">
+    <link rel="stylesheet" href="modules/piano/piano.css">
+    <link rel="stylesheet" href="modules/grid/grid.css">
+    <link rel="stylesheet" href="modules/song/song.css">
+    <link rel="stylesheet" href="modules/params/params.css">
+    <link rel="stylesheet" href="modules/layout/layout.css">
 
-			<!-- Tab panes -->
-			<div class="tab-content">
-				<div data-module="project-settings" role="tabpanel" class="tab-pane active">
-					<table>
-						<tr>
-							<td class="id" colspan="2">56f815d003352c291f74f239</td>
-						</tr>
-						<tr>
-							<td>Proj</td>
-							<td>
-								<select data-type="select-entity">
-									<option>New project</option>
-								</select>
-								<button class="pull-right" data-type="remove-btn"><i class="fa fa-eraser"></i></button>
-								<button class="pull-right" data-type="save-btn"><i class="fa fa-save"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td>Name</td>
-							<td><input data-type="name" type="text" value="Untitled"/></td>
-						</tr>
-						<tr>
-							<td>BPM</td>
-							<td><input data-type="bpm" type="text" value="120"/></td>
-						</tr>
-					</table>
-				</div>
-				<div data-module="instrument-settings" role="tabpanel" class="tab-pane">
-					<table>
-						<tr>
-							<td class="id" colspan="2">56f815d003352c291f74f239</td>
-						</tr>
-                        <tr>
-                            <td>Instr</td>
-                            <td>
-                                <select data-type="select-entity"></select>
-                                <button class="pull-right" data-type="remove-btn"><i class="fa fa-eraser"></i></button>
-                                <button class="pull-right" data-type="save-btn"><i class="fa fa-save"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Name</td>
-                            <td><input data-type="name" type="text" value="untitled"/></td>
-                        </tr>
-						<tr>
-							<td>Type</td>
-							<td>
-								<select data-type="select-entity">
-									<option>Electribe</option>
-									<option>XL-1</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>Device</td>
-							<td>
-								<select data-type="select-entity">
-									<option>device xyz</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>Channel</td>
-							<td>
-								<select data-type="select-entity">
-									<option>1</option>
-									<option>2</option>
-									<option>3</option>
-									<option>4</option>
-									<option>5</option>
-									<option>6</option>
-									<option>7</option>
-									<option>8</option>
-									<option>9</option>
-									<option>10</option>
-									<option>11</option>
-									<option>12</option>
-									<option>13</option>
-									<option>14</option>
-									<option>15</option>
-									<option>16</option>
-								</select>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div data-module="pattern-settings" role="tabpanel" class="tab-pane">
-					<table>
-						<tr>
-							<td class="id" colspan="2">56f815d003352c291f74f239</td>
-						</tr>
-						<tr>
-							<td colspan="2" class="buttons">
-								<button class="pull-left" data-type="new-btn"><i class="fa fa-file-o"></i></button>
-								<button class="pull-left" data-type="link-btn"><i class="fa fa-link"></i></button>
-								<button class="pull-left" data-type="copy-btn"><i class="fa fa-copy"></i></button>
-								<button class="pull-left" data-type="remove-btn"><i class="fa fa-eraser"></i></button>
-							</td>
-						</tr>
-						<tr>
-							<td>Name</td>
-							<td><input data-type="name" type="text" /></td>
-						</tr>
-						<tr>
-							<td>Len</td>
-							<td><input data-type="name" type="text" /></td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</td>
-		<td>
-			<div data-module="pattern-params">
-				<div class="param-table-wrapper">
-					<table class="param-table noselect">
-						<tr>
+    <link rel="stylesheet" href="index.css">
 
-						</tr>
-					</table>
-				</div>
-			</div>
-		</td>
-	</tr>
-</table>
+    <body>
 
-<script type="text/javascript">
+        <div data-module="patterns">
+            <ul class="patterns"></ul>
+        </div>
 
-	var fs = require('fs');
+        <div data-module="piano">
+            <!-- piano must be before grid, or z-index: 1 must be set on grid -->
+            <div data-type="piano">
+            </div>
+            <script type="text/x-config">
+                {
+                    "y":10
+                }
+            </script>
+        </div>
 
-	var Box = require('t3js'),
-		jQuery = $ = require('jquery'),
-		jQueryUI = require('jquery-ui'),
-		multiSortable = require('./js/jquery.multisortable'),
-		bootstrap = require('bootstrap');
+        <div data-module="grid" ondragstart="return false;">
+            <div data-type="grid">
 
-	// Load all modules, services and behaviours
-	['Module','Service', 'Behaviour'].forEach(function(type) {
-		var dir = './'+type.toLowerCase() + 's'
-		fs.readdirSync(dir).forEach(function(file) {
-			var js = /\.js$/;
-			if(js.test(file)) {
-				Box.Application['add'+type](file.replace(js, ''), require(dir +'/'+ file));
-			}
-		});
-	});
-	Box.Application.init();
+            </div>
+            <script type="text/x-config">
+                {
+                    "x":50,
+                    "y":10
+                }
+            </script>
+        </div>
 
-</script>
-</body>
+        <div data-module="song" ondragstart="return false;">
+            <table>
+                <tr>
+                    <td><label for="song-name">Song</label></td>
+                    <td><input id="song-name" type="text" data-type="name" /></td>
+                </tr>
+                <tr>
+                    <td><label for="song-instrument">Instr</label></td>
+                    <td><select id="song-instrument" data-type="instruments"></select></td>
+                </tr>
+                <tr>
+                    <td><label for="song-param">Param</label></td>
+                    <td><select id="song-param" data-type="params"></select></td>
+                </tr>
+            </table>
+
+            <script type="text/x-config">{}</script>
+        </div>
+
+        <div data-module="params" ondragstart="return false;">
+            <div data-type="params">
+
+            </div>
+            <script type="text/x-config">
+                {
+                    "x":50
+                }
+            </script>
+        </div>
+
+        <div data-module="layout">
+            <script type="text/x-config">{}</script>
+        </div>
+
+
+        <script type="text/javascript">
+            /* CORE */
+            path = require('path');
+
+            /* LIBS */
+            $ = jQuery = require('./libs/jquery-2.2.3.min');
+            require('./libs/jquery-ui-1.11.4.custom/jquery-ui.min');
+            require('./libs/jquery.multisortable');
+            require('./libs/bootstrap/js/bootstrap.min');
+            _ = require('./libs/lodash');
+            Box = require('./libs/t3.modified');
+
+            /* SERVICES */
+            require('./services/song.js');
+            require('./services/midi-msgr.js');
+
+            /* MODULES */
+            require('./modules/patterns/patterns.js');
+            require('./modules/piano/piano.js');
+            require('./modules/grid/grid.js');
+            require('./modules/song/song.js');
+            require('./modules/params/params.js');
+            require('./modules/layout/layout.js');
+
+            Box.Application.init({
+                debug:true
+            })
+        </script>
+    </body>
 </html>

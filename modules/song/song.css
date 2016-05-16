@@ -1,0 +1,58 @@
+[data-module="song"] {
+	position: absolute;
+	background-color: white;
+	font-size: 10px;
+	overflow: hidden;
+}
+
+[data-module="song"] table {
+	width: 100%;
+}
+
+[data-module="song"] table tr td:first-child {
+	font-weight: bold;
+}
+
+[data-module="song"] select,
+[data-module="song"] input[type="text"] {
+	margin: 0 0 2px 0;
+	font-size: 10px;
+	line-height: 17px;
+	height: 17px;
+	border: none;
+	border-bottom: 1px solid #ddd;
+}
+
+[data-module="song"] select {
+	width: 100%;
+	background-color: white;
+}
+
+[data-module="song"] select:focus {
+	outline: none;
+}
+
+[data-module="song"] select option {
+	line-height: 20px;
+}
+/***********************************************************************************************************************
+ * BOOTSTRAP OVERRULES
+ **********************************************************************************************************************/
+[data-module="song"] .nav>li>a {
+	padding: 2px 3px;
+}
+[data-module="song"] input[type="text"] {
+
+	padding: 0 0 0 5px;
+	margin: 0;
+	width: 100%
+}
+[data-module="song"] input[type="text"]:focus {
+	outline: none;
+}
+
+
+
+
+
+

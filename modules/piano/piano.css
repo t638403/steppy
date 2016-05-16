@@ -1,0 +1,43 @@
+[data-module="piano"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50px;
+    height: 500px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	background-color: #ddd;
+}
+
+[data-type="piano"] {
+	/* A little padding to make up for scrollbar of grid */
+	padding-bottom: 15px;
+	background-color: #ddd;
+}
+
+[data-type="piano"] [data-type="key"] {
+	color: gray;
+    height: 25px;
+	overflow: hidden;
+	font-size: 7px;
+	padding-left: 5px;
+	background-color: white;
+}
+
+[data-type="piano"] [data-type="key"].black {
+	background-color: gray;
+	color: white;
+}
+
+[data-type="piano"] [data-type="key"].curr,
+[data-type="piano"] [data-type="key"].pressed
+{
+	background-color: rgba(0,0,255,0.5);
+	color: white;
+}
+
+
+
+[data-type="piano"] [data-type="key"].central-c {
+	background-color: yellow;
+}
