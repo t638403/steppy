@@ -19,8 +19,7 @@ Box.Application.addModule('patterns', function (context) {
 		},
 		init:init,
 		destroy:destroy,
-		onclick:onclick,
-		onmousedown:onmousedown
+		onclick:onclick
 	};
 
 	function init() {
@@ -50,19 +49,23 @@ Box.Application.addModule('patterns', function (context) {
 
 	}
 
-	function onmousedown(event, elem, elemType) {
+	function onclick(event, elem, elemType) {
+		var $this = $(elem);
 		switch(elemType) {
 			case 'pattern':
 				song.pattern.setCurrIndex(parseInt($(elem).data('id')));
 				context.broadcast('patternchange');
+				render();
 				break;
-		}
-	}
-
-	function onclick(event, elem, elemType) {
-		switch(elemType) {
-			case 'pattern':
-				song.pattern.setCurrIndex(parseInt($(elem).data('id')));
+			case 'remove-btn':
+				var index = parseInt($this.closest('[data-type="pattern"]').data('id'));
+				song.pattern.remove(index);
+				context.broadcast('patternchange');
+				render();
+				break;
+			case 'copy-btn':
+				var index = parseInt($this.closest('[data-type="pattern"]').data('id'));
+				song.pattern.duplicate(index);
 				context.broadcast('patternchange');
 				render();
 				break;
@@ -72,7 +75,7 @@ Box.Application.addModule('patterns', function (context) {
 	function render() {
 		$patterns.html('');
 		song.pattern.list().forEach(function(pattern, index) {
-			var $pattern = $('<li data-type="pattern" class="noselect" data-id="' + index + '"><div class="pattern-inner">' + pattern.name + '<button data-type="remove-btn"><i class="fa fa-eraser"></i></button><button data-type="copy-btn"><i class="fa fa-files-o" aria-hidden="true"></i></button></div></li>');
+			var $pattern = $('<li data-type="pattern" class="noselect" data-id="' + index + '"><div class="pattern-inner">' + pattern.name + '<button data-type="remove-btn"><i class="fa fa-remove"></i></button><button data-type="copy-btn"><i class="fa fa-files-o" aria-hidden="true"></i></button></div></li>');
 			if(index == song.pattern.getCurrIndex()) {
 				$pattern.addClass('selected');
 			}

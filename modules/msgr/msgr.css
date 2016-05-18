@@ -1,0 +1,26 @@
+[data-module="msgr"] {
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding-left: 10px;
+	font-size: 10px;
+	line-height: 18px;
+	border: 2px inset #ddd;
+	overflow: hidden;
+}
+[data-module="msgr"].ok {
+	background-color: greenyellow;
+}
+
+[data-module="msgr"].error {
+	background-color: #e4b9b9;
+}
+
+[data-module="msgr"].warning {
+	background-color: yellow;
+}
+
+[data-module="msgr"].info {
+	background-color: white;
+	transition: background-color 1s
+}

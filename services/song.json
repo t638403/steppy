@@ -1,5 +1,5 @@
 {
-  "name": "Infinite Vertice",
+  "name": "EmptySong",
   "bpm":120,
   "instruments":[
     {
@@ -10,31 +10,6 @@
       "patterns":[
         {
           "name":"Pattern 0",
-          "notes":[],
-          "params":[]
-        },
-        {
-          "name":"Pattern 1",
-          "notes":[],
-          "params":[]
-        },
-        {
-          "name":"Pattern 2",
-          "notes":[],
-          "params":[]
-        },
-        {
-          "name":"Pattern 3",
-          "notes":[],
-          "params":[]
-        },
-        {
-          "name":"Pattern 4",
-          "notes":[],
-          "params":[]
-        },
-        {
-          "name":"Pattern 5",
           "notes":[],
           "params":[]
         }

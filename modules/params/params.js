@@ -88,7 +88,7 @@ Box.Application.addModule('params', function(context) {
 		var $param = $('<div data-type="param" data-id="'+ i +'"  ondragstart="return false;" />');
 		$param.width(cfg.x);
 		var $innerParam = $('<div class="inner-param" />');
-		var $removeParam = $('<button data-type="remove-param" data-id="'+ i +'"><i class="fa fa-eraser"></i></button>');
+		var $removeParam = $('<button data-type="remove-param" data-id="'+ i +'"><i class="fa fa-remove"></i></button>');
 		if(!p) {
 			$param.addClass('empty');
 			$innerParam.css({

@@ -37,6 +37,7 @@ Box.Application.addModule('layout', function(context) {
 		context.broadcast('layout-part-C', C());
 		context.broadcast('layout-part-D', D());
 		context.broadcast('layout-part-F', F());
+		context.broadcast('layout-part-G', G());
 	}
 
 	function A() {
@@ -44,7 +45,7 @@ Box.Application.addModule('layout', function(context) {
 			left:0,
 			top:0,
 			width: 200,
-			height: ($(window).height() - 200)
+			height: ($(window).height() - 220)
 		}
 	}
 
@@ -53,7 +54,7 @@ Box.Application.addModule('layout', function(context) {
 			left:200,
 			top:0,
 			width: 50,
-			height: ($(window).height() - 200)
+			height: ($(window).height() - 220)
 		}
 	}
 
@@ -62,14 +63,14 @@ Box.Application.addModule('layout', function(context) {
 			left:250,
 			top:0,
 			width: ($(window).width() - 250),
-			height: ($(window).height() - 200)
+			height: ($(window).height() - 220)
 		}
 	}
 
 	function D() {
 		return {
 			left:0,
-			top:($(window).height() - 200),
+			top:($(window).height() - 220),
 			width: 200,
 			height: 200
 		}
@@ -78,9 +79,18 @@ Box.Application.addModule('layout', function(context) {
 	function F() {
 		return {
 			left:250,
-			top:($(window).height() - 200),
+			top:($(window).height() - 220),
 			width: ($(window).width() - 250),
 			height: 200
+		}
+	}
+
+	function G() {
+		return {
+			left:0,
+			top:($(window).height() - 20),
+			width: $(window).width(),
+			height: 20
 		}
 	}
 });

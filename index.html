@@ -13,9 +13,8 @@
     <link rel="stylesheet" href="modules/grid/grid.css">
     <link rel="stylesheet" href="modules/song/song.css">
     <link rel="stylesheet" href="modules/params/params.css">
+    <link rel="stylesheet" href="modules/msgr/msgr.css">
     <link rel="stylesheet" href="modules/layout/layout.css">
-
-    <link rel="stylesheet" href="index.css">
 
     <body>
 
@@ -47,10 +46,13 @@
         </div>
 
         <div data-module="song" ondragstart="return false;">
+            <button data-type="song-new"><i class="fa fa-file-o" aria-hidden="true"></i></button>
+            <button data-type="song-save"><i class="fa fa-save" aria-hidden="true"></i></button>
+            <button data-type="song-open"><i class="fa fa-folder-o" aria-hidden="true"></i></button>
             <table>
                 <tr>
                     <td><label for="song-name">Song</label></td>
-                    <td><input id="song-name" type="text" data-type="name" /></td>
+                    <td><input id="song-name" type="text" data-type="song-name" /></td>
                 </tr>
                 <tr>
                     <td><label for="song-instrument">Instr</label></td>
@@ -61,7 +63,9 @@
                     <td><select id="song-param" data-type="params"></select></td>
                 </tr>
             </table>
-
+            <button data-type="song-play"><i class="fa fa-play" aria-hidden="true"></i></button>
+            <button data-type="song-loop"><i class="fa fa-undo" aria-hidden="true"></i></button>
+            <button data-type="song-stop"><i class="fa fa-stop" aria-hidden="true"></i></button>
             <script type="text/x-config">{}</script>
         </div>
 
@@ -76,6 +80,10 @@
             </script>
         </div>
 
+        <div data-module="msgr" class="info">
+            <script type="text/x-config">{}</script>
+        </div>
+
         <div data-module="layout">
             <script type="text/x-config">{}</script>
         </div>
@@ -84,6 +92,7 @@
         <script type="text/javascript">
             /* CORE */
             path = require('path');
+            fs = require('fs');
 
             /* LIBS */
             $ = jQuery = require('./libs/jquery-2.2.3.min');
@@ -98,12 +107,13 @@
             require('./services/midi-msgr.js');
 
             /* MODULES */
+            require('./modules/layout/layout.js');
+            require('./modules/msgr/msgr.js');
             require('./modules/patterns/patterns.js');
             require('./modules/piano/piano.js');
             require('./modules/grid/grid.js');
             require('./modules/song/song.js');
             require('./modules/params/params.js');
-            require('./modules/layout/layout.js');
 
             Box.Application.init({
                 debug:true

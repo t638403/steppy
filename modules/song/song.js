@@ -10,6 +10,8 @@ Box.Application.addModule('song', function(context) {
 		init:init,
 		destroy:destroy,
 		onchange:onchange,
+		onclick:onclick,
+		ondblclick:ondblclick,
 		onmessage:function onmessage(name, data) {
 			if(name == 'layout-part-D') {
 				$elem.css(data).css(data);
@@ -28,6 +30,8 @@ Box.Application.addModule('song', function(context) {
 		cfg = context.getConfig();
 		song = context.getService('song');
 
+		$elem.find('[data-type="song-name"]').val(song.name());
+
 		render();
 	}
 
@@ -37,6 +41,43 @@ Box.Application.addModule('song', function(context) {
 		cfg = null;
 
 		song = null;
+	}
+
+	function onclick(event, elem, elemType) {
+		var $this = $(elem);
+		switch(elemType) {
+			case 'song-new':
+				song.new();
+				render();
+				context.broadcast('instrumentchange');
+				context.broadcast('patternchange');
+				context.broadcast('paramchange');
+				context.broadcast('info', 'Loaded empty song');
+				break;
+			case 'song-save':
+				song.save(function(err) {
+					if(err) {
+						context.broadcast('error', err.toString());
+					} else {
+						context.broadcast('ok', 'File saved');
+					}
+				})
+				break;
+			case 'song-open':
+				var name = $elem.find('[data-type="song-name"]').val();
+				song.open(name, function(err) {
+					if(err) {
+						context.broadcast('error', err.toString());
+					} else {
+						context.broadcast('instrumentchange');
+						context.broadcast('patternchange');
+						context.broadcast('paramchange');
+						render();
+						context.broadcast('ok', 'File loaded');
+					}
+				});
+				break;
+		}
 	}
 
 	function onchange(event, elem, elemType) {
@@ -53,11 +94,17 @@ Box.Application.addModule('song', function(context) {
 				song.instrument.param.setCurr(parseInt($this.val()));
 				context.broadcast('paramchange');
 				break;
+			case 'song-name':
+				song.name($this.val());
+				render();
+				context.broadcast('info', 'Song name changed to ' + song.name())
+				break;
 		}
 	}
 
 	function render() {
-		$elem.find('input[data-type="name"]').val(song.name());
+
+		$elem.find('input[data-type="song-name"]').val(song.name());
 
 		$instruments = $elem.find('select[data-type="instruments"]');
 		$instruments.html('');

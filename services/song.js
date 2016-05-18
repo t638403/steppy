@@ -1,9 +1,12 @@
 Box.Application.addService('song', function(application) {
 
+	"use strict";
+
 	var _ = application.getGlobal('_');
 	var path = application.getGlobal('path');
+	var fs = application.getGlobal('fs');
 
-	var song = require(path.join(__dirname, 'song.json'));
+	var song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding:'utf8'}));
 
 	var selectedInstrumentIndex = 0;
 	var currPattern = 0;
@@ -12,8 +15,35 @@ Box.Application.addService('song', function(application) {
 
 
 	return {
-		name:function() {
+		new:function() {
+			song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding:'utf8'}));
+		},
+		name:function(n) {
+			if(n) {
+				song.name = n;
+			}
 			return song.name;
+		},
+		save:function(cb) {
+			fs.writeFile(path.join(__dirname, '../songs/'+song.name+'.json'), JSON.stringify(song), {encoding:'utf8'}, cb);
+		},
+		open:function(name, cb) {
+			fs.readFile(path.join(__dirname, '../songs/'+name+'.json'), {encoding:'utf8'}, function(err, data) {
+				if(err) {
+					cb(err);
+				} else {
+					try {
+						song = JSON.parse(data);
+						selectedInstrumentIndex = 0;
+						currPattern = 0;
+						currKey = 'C4';
+						currParam = 0;
+						cb();
+					} catch(err) {
+						cb(err);
+					}
+				}
+			});
 		},
 		instrument:{
 			list:function() {
@@ -58,14 +88,37 @@ Box.Application.addService('song', function(application) {
 			list:function(){
 				return song.instruments[selectedInstrumentIndex].patterns;
 			},
-			newOrder:function(order) {
+			newOrder:function(newOrder) {
 				var patterns = _.cloneDeep(song.instruments[selectedInstrumentIndex].patterns);
-				order.forEach(function(oldIndex, index) {
-					if(oldIndex == currPattern) {
+				var currPatternIsSet = false;
+				newOrder.forEach(function(oldIndex, index) {
+					if(!currPatternIsSet && oldIndex == currPattern) {
 						currPattern = index;
+						currPatternIsSet = true;
 					}
 					song.instruments[selectedInstrumentIndex].patterns[index] = patterns[oldIndex];
 				});
+			},
+			duplicate: function(index) {
+				var len = song.instruments[selectedInstrumentIndex].patterns.length;
+				var duplicate = _.cloneDeep(song.instruments[selectedInstrumentIndex].patterns[index]);
+				song.instruments[selectedInstrumentIndex].patterns.splice(index, 0, duplicate);
+				song.instruments[selectedInstrumentIndex].patterns[index + 1].name = 'Pattern ' + len;
+				currPattern = index + 1;
+			},
+			remove:function(index) {
+				song.instruments[selectedInstrumentIndex].patterns.splice(index, 1);
+				currPattern = index - 1;
+				if(currPattern<0) currPattern = 0;
+				if(song.instruments[selectedInstrumentIndex].patterns.length == 0) {
+					song.instruments[selectedInstrumentIndex].patterns = [
+						{
+							"name":"Pattern 0",
+							"notes":[],
+							"params":[]
+						}
+					];
+				}
 			},
 			setCurrIndex:function(index) {
 				currPattern = index;
