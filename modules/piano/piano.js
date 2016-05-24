@@ -44,7 +44,7 @@ Box.Application.addModule('piano', function(context) {
 		$elem = $(context.getElement());
         $piano = $elem.find('[data-type="piano"]');
 
-        keys = range(87).map(createKey);
+        keys = range(88).map(createKey);
         isPressingKey = false;
 
 		var type = song.instrument.type.curr();
@@ -115,7 +115,7 @@ Box.Application.addModule('piano', function(context) {
     }
 
 	function id2notenr(id) {
-		return (22 + id);
+		return 108 - id;
 	}
 
     function renderKey(k, i) {
@@ -145,7 +145,7 @@ Box.Application.addModule('piano', function(context) {
             $key.addClass('pressed');
         }
 		if(!mappedKeys) {
-        	$piano.prepend($key);
+        	$piano.append($key);
 		}
     }
 });

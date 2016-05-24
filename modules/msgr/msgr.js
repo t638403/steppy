@@ -2,6 +2,7 @@ Box.Application.addModule('msgr', function(context) {
 
 	var $,
 		$elem,
+		$msg,
 		duration;
 
 	return {
@@ -14,6 +15,7 @@ Box.Application.addModule('msgr', function(context) {
 	function init() {
 		$ = context.getGlobal('jQuery');
 		$elem = $(context.getElement());
+		$msg = $elem.find('.msg');
 
 		duration = 2000;
 		context.broadcast('ok', 'Welcome to Steppy! Have lots of fun :-)');
@@ -26,7 +28,7 @@ Box.Application.addModule('msgr', function(context) {
 
 	function hideMsg() {
 		$elem.addClass('info');
-		$elem.text('');
+		$msg.html('');
 	}
 
 	function onmessage(type, data) {
@@ -34,25 +36,25 @@ Box.Application.addModule('msgr', function(context) {
 			case 'ok':
 				$elem.removeClass();
 				$elem.addClass('ok');
-				$elem.text(data);
+				$msg.html(data);
 				setTimeout(hideMsg, duration);
 				break;
 			case 'error':
 				$elem.removeClass();
 				$elem.addClass('error');
-				$elem.text(data);
+				$msg.html(data);
 				setTimeout(hideMsg, duration);
 				break;
 			case 'warning':
 				$elem.removeClass();
 				$elem.addClass('warning');
-				$elem.text(data);
+				$msg.html(data);
 				setTimeout(hideMsg, duration);
 				break;
 			case 'info':
 				$elem.removeClass();
 				$elem.addClass('info');
-				$elem.text(data);
+				$msg.html(data);
 				setTimeout(hideMsg, duration);
 				break;
 			case 'layout-part-G':

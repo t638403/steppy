@@ -77,6 +77,14 @@ Box.Application.addModule('song', function(context) {
 					}
 				});
 				break;
+			case 'song-play':
+				song.play();
+				context.broadcast('ok', '<i class="fa fa-music" aria-hidden="true"></i> Now playing <i class="fa fa-music" aria-hidden="true"></i>')
+				break;
+			case 'song-stop':
+				song.stop();
+				context.broadcast('ok', 'Music stopped')
+				break;
 		}
 	}
 
@@ -99,12 +107,18 @@ Box.Application.addModule('song', function(context) {
 				render();
 				context.broadcast('info', 'Song name changed to ' + song.name())
 				break;
+			case 'song-bpm':
+				song.bpm($this.val());
+				render();
+				context.broadcast('info', 'Bpm name changed to ' + song.bpm())
+				break;
 		}
 	}
 
 	function render() {
 
 		$elem.find('input[data-type="song-name"]').val(song.name());
+		$elem.find('input[data-type="song-bpm"]').val(song.bpm());
 
 		$instruments = $elem.find('select[data-type="instruments"]');
 		$instruments.html('');

@@ -1,0 +1,419 @@
+[data-module="instruments"] {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+[data-module="instruments"] .instrument-types {
+	/*display: none;*/
+}
+
+[data-module="instruments"] .electribe {
+	background-image: url('./electribe/metal.png');
+	background-size: cover;
+	overflow: auto;
+}
+
+[data-module="instruments"] .electribe h1 {
+	margin: 1px 0 -4px 1px;
+	color: white;
+	font-size: 20px;
+	display: block;
+	width: 360px;
+	line-height: 35px;
+	background-image: url('./electribe/logo.png');
+	text-indent: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+[data-module="instruments"] .electribe .bg_color {
+	background-color: rgba(200, 56, 31, 0.4);
+	overflow: auto;
+}
+
+/***********************************************************************************************************************
+* DIAL/BUTTON - Shared
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .btn_rect_square,
+[data-module="instruments"] .electribe .btn_rect_vertical
+{
+	cursor: pointer;
+}
+
+[data-module="instruments"] .electribe .dial,
+[data-module="instruments"] .electribe .btn_rect_horizontal
+{
+	margin: 5px 0 0 5px;
+	float: left;
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+	background-repeat: no-repeat;
+	background-position-y: 10px;
+	background-position-x: 5px;
+	cursor: pointer;
+}
+
+[data-module="instruments"] .electribe .dial h3,
+[data-module="instruments"] .electribe .btn_rect_horizontal h3,
+[data-module="instruments"] .electribe .btn_rect_square h3
+{
+	margin: 0;
+	text-transform: uppercase;
+	color: white;
+	display: block;
+	font-size: 6px;
+	font-weight: bold;
+	font-style: italic;
+	white-space: nowrap;
+	line-height: 10px;
+	text-align: center;
+}
+
+
+/***********************************************************************************************************************
+* DIAL
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .dial {
+	background-image: url('./electribe/dial_bg.png');
+}
+
+[data-module="instruments"] .electribe .disabled .dial {
+	cursor: default;
+}
+
+[data-module="instruments"] .electribe .dial h3 {
+
+}
+
+[data-module="instruments"] .electribe .dial-inner {
+	width: 40px;
+	height: 40px;
+	margin-left: 5px;
+	background-image: url('./electribe/dial.png');
+}
+
+/***********************************************************************************************************************
+* BUTTON
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .btn_rect_horizontal {
+	background-image: url('./electribe/btn_rect_horizontal.png');
+}
+
+[data-module="instruments"] .electribe .btn_rect_vertical {
+	background-image: url('./electribe/btn_rect_vertical.png');
+	width: 30px;
+	height: 40px;
+	float: left;
+	margin-left: 2px;
+}
+
+[data-module="instruments"] .electribe .btn_rect_vertical.on{
+	background-image: url('./electribe/btn_rect_vertical_on.png');
+}
+
+[data-module="instruments"] .electribe .btn_rect_square {
+	margin-top: 5px;
+	background-image: url('./electribe/btn_rect_square.png');
+	background-position-y: 5px;
+	background-repeat: no-repeat;
+	width: 30px;
+	height: 35px;
+	float: left;
+}
+
+[data-module="instruments"] .electribe .btn_rect_square.on {
+	background-image: url('./electribe/btn_rect_square_on.png');
+}
+
+[data-module="instruments"] .electribe .btn_rect_horizontal.pressed {
+	background-image: url('./electribe/btn_rect_horizontal_pressed.png');
+}
+
+[data-module="instruments"] .electribe .disabled .btn_rect_horizontal {
+	cursor: default;
+}
+
+[data-module="instruments"] .electribe .btn_rect_horizontal h3 {
+	width: 50px;
+	margin-top: 10px;
+	height: 50px;
+	float: left;
+	white-space: nowrap;
+}
+
+/* The leds next to a button */
+
+[data-module="instruments"] .electribe .btn_rect_horizontal .led {
+	float: right;
+}
+
+[data-module="instruments"] .electribe .btn_rect_horizontal .led img {
+	margin-top: -3px;
+}
+
+[data-module="instruments"] .electribe .btn_rect_horizontal .led:nth-child(2) {
+	margin-top: 16px;
+}
+
+
+/***********************************************************************************************************************
+* LED
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .led {
+	background-image: url('./electribe/led_off.png');
+	width: 10px;
+	height: 15px;
+	font-size: 6px;
+	font-weight: bold;
+	font-style: italic;
+	color: white;
+	text-transform: uppercase;
+	line-height: 15px;
+	padding-left: 15px;
+	background-repeat: no-repeat;
+	background-position-y: 1px;
+}
+
+[data-module="instruments"] .electribe .led.on {
+	background-image: url('./electribe/led_on.png');
+}
+
+/***********************************************************************************************************************
+* BUTTON - Wave
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .btn_rect_horizontal.wave {
+	width: 100px;
+}
+
+[data-module="instruments"] .electribe .btn_rect_horizontal.wave .led {
+	width: 45px;
+}
+
+/***********************************************************************************************************************
+* BUTTON - Motion Seq
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .btn_rect_horizontal.motion_seq {
+	width: 115px;
+	margin-top: -5px;
+}
+
+[data-module="instruments"] .electribe .btn_rect_horizontal.motion_seq .led {
+	width: 60px;
+}
+
+/***********************************************************************************************************************
+* BUTTON - Delay Type
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .btn_rect_horizontal.delay_type {
+	width: 115px;
+	background-position-y: 0px;
+	height: 85px;
+	width: 58px;
+}
+
+[data-module="instruments"] .electribe .btn_rect_horizontal.delay_type h3 {
+	margin-top: 0;
+	height: 10px;
+}
+
+[data-module="instruments"] .electribe .btn_rect_horizontal.delay_type .led:nth-child(2) {
+	margin-top: 20px;
+}
+
+[data-module="instruments"] .electribe .btn_rect_horizontal.delay_type .led {
+	width: 55px;
+	white-space: nowrap;
+	height: 12px;
+}
+
+/***********************************************************************************************************************
+* BUTTON - Cros Mod
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .btn_rect_square.cross_mod {
+	margin-left: 18px;
+}
+
+/***********************************************************************************************************************
+* BUTTON - Ring Mod
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .btn_rect_square.ring_mod {
+	margin-left: 82px;
+}
+
+/***********************************************************************************************************************
+* BUTTON - Crash
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .btn_rect_square.snd_crash {
+	margin-left: 34px;
+}
+
+/***********************************************************************************************************************
+* DIAL - Mod Depth / Pan
+***********************************************************************************************************************/
+
+[data-module="instruments"] .electribe .dial.mod_depth,
+[data-module="instruments"] .electribe .dial.pan
+{
+	background-image: url('./electribe/dial_bg_centered.png');
+}
+
+/***********************************************************************************************************************
+* DIAL - Mod Type
+***********************************************************************************************************************/
+
+[data-module="instruments"] .electribe .dial.mod_type {
+	width: 65px;
+	background-image: url('./electribe/dial_mod_type.png');
+	margin-left: 0;
+}
+
+[data-module="instruments"] .electribe .dial.mod_type h3 {
+	margin-left: 5px;
+}
+
+[data-module="instruments"] .electribe .dial.mod_type .dial-inner {
+	margin-left: 15px;
+}
+
+/***********************************************************************************************************************
+* DIAL - Delay Depth
+***********************************************************************************************************************/
+
+[data-module="instruments"] .electribe .dial.delay_depth {
+	margin-left: -5px;
+	border-radius: 20px;
+}
+
+/***********************************************************************************************************************
+* SECTION
+***********************************************************************************************************************/
+
+[data-module="instruments"] .electribe .electribe_section {
+	float: left;
+	border: 1px solid white;
+	border-right: none;
+	border-bottom: none;
+	margin: 5px 0 0 5px;
+	overflow: hidden;
+}
+
+[data-module="instruments"] .electribe .electribe_section h2 {
+	height: 10px;
+	overflow: hidden;
+	margin: 0;
+	display: block;
+	line-height: 10px;
+	text-transform: uppercase;
+	background-color: white;
+	color: rgba(170, 46, 21, 0.5);
+	font-size: 8px;
+	font-weight: bold;
+	font-style: italic;
+	padding-top: 1px;
+	text-align: center;
+}
+
+[data-module="instruments"] .electribe .electribe_section.disabled {
+	opacity: 0.3;
+}
+
+/***********************************************************************************************************************
+* SECTION - Oscillator
+***********************************************************************************************************************/
+
+[data-module="instruments"] .electribe .electribe_section.oscillator {
+	width: 173px;
+	margin: 5px 0 0 5px;
+	border-right :none;
+	height: 130px;
+}
+
+/***********************************************************************************************************************
+* SECTION - Amp
+***********************************************************************************************************************/
+
+[data-module="instruments"] .electribe .electribe_section.amp {
+	width: 117px;
+	margin: 5px 0 0 0;
+	height: 130px;
+	border-right: 1px solid white;
+}
+
+/***********************************************************************************************************************
+* SECTION - Untitled
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .electribe_section.untitled {
+	padding-top: 10px;
+	margin:0 0 0 5px;
+	width: 120px;
+	height: 75px;
+}
+
+/***********************************************************************************************************************
+* SECTION - Delay
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .electribe_section.delay {
+	margin:0;
+	width: 170px;
+	height: 75px;
+	border-right: 1px solid white;
+}
+
+/***********************************************************************************************************************
+* SECTION - Presets
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .electribe_section.presets {
+	margin: 5px 5px 0 5px;
+	height: 203px;
+	width: 95px;
+	float: right;
+	border-left: none;
+}
+
+/***********************************************************************************************************************
+* SECTION - Sounds
+***********************************************************************************************************************/
+[data-module="instruments"] .electribe .electribe_section.sounds {
+	margin:0 0 5px 5px;
+	width: 290px;
+	height: 100px;
+	border: 1px solid white;
+}
+
+[data-module="instruments"] .electribe .electribe_section.sounds .sounds_row2 {
+	margin-bottom: -5px;
+}
+
+[data-module="instruments"] .electribe .electribe_section.sounds .sounds_row1,
+[data-module="instruments"] .electribe .electribe_section.sounds .sounds_row2,
+[data-module="instruments"] .electribe .electribe_section.sounds .sounds_row3,
+[data-module="instruments"] .electribe .electribe_section.sounds .sounds_row4,
+[data-module="instruments"] .electribe .electribe_section.sounds .sounds_row5
+{
+	overflow: hidden;
+	margin-left: -1px;
+}
+
+[data-module="instruments"] .electribe .electribe_section.sounds .sounds_row4,
+[data-module="instruments"] .electribe .electribe_section.sounds .sounds_row5
+{
+	height: 10px;
+	font-size: 6px;
+	font-weight: bold;
+	font-style: italic;
+	color: white;
+	text-transform: uppercase;
+}
+
+[data-module="instruments"] .electribe .electribe_section.sounds .sounds_row5 div {
+	width: 30px;
+	float: left;
+	margin-left: 2px;
+	text-align: center;
+}
+
+[data-module="instruments"] .electribe .electribe_section.sounds .sounds_row3 {
+	margin-bottom: -4px;
+}

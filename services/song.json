@@ -3,10 +3,10 @@
   "bpm":120,
   "instruments":[
     {
-      "name":"Electribe",
+      "name":"Electribe 0",
       "device":0,
       "ch":2,
-      "type":"Electribe",
+      "type":"electribe",
       "patterns":[
         {
           "name":"Pattern 0",
@@ -95,7 +95,7 @@
       ]
     },
     {
-      "name": "Electribe",
+      "name": "electribe",
       "keys": {
         "C2": "S1",
         "D2": "S2",

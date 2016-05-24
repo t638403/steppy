@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="modules/song/song.css">
     <link rel="stylesheet" href="modules/params/params.css">
     <link rel="stylesheet" href="modules/msgr/msgr.css">
+    <link rel="stylesheet" href="modules/instruments/instruments.css">
     <link rel="stylesheet" href="modules/layout/layout.css">
 
     <body>
@@ -55,6 +56,10 @@
                     <td><input id="song-name" type="text" data-type="song-name" /></td>
                 </tr>
                 <tr>
+                    <td><label for="song-bpm">BPM</label></td>
+                    <td><input id="song-bpm" type="number" data-type="song-bpm" /></td>
+                </tr>
+                <tr>
                     <td><label for="song-instrument">Instr</label></td>
                     <td><select id="song-instrument" data-type="instruments"></select></td>
                 </tr>
@@ -81,6 +86,272 @@
         </div>
 
         <div data-module="msgr" class="info">
+            <div class="msg"></div>
+            <script type="text/x-config">{}</script>
+        </div>
+
+        <div data-module="instruments">
+
+            <div class="instrument-types">
+                <div class="instrument-type electribe">
+                    <div class="bg_color">
+                        <h1>Korg Electribe R mkII</h1>
+                        <div class="electribe_section oscillator">
+                            <h2>Oscillator</h2>
+
+                            <div class="dial pitch">
+                                <h3>Pitch</h3>
+                                <div class="dial-inner">
+
+                                </div>
+                            </div>
+                            <div class="dial mod_depth">
+                                <h3>Mod Depth</h3>
+                                <div class="dial-inner">
+
+                                </div>
+                            </div>
+                            <div class="dial mod_speed">
+                                <h3>Mod Speed</h3>
+                                <div class="dial-inner">
+
+                                </div>
+                            </div>
+
+                            <div class="btn_rect_horizontal wave">
+                                <h3>Wave</h3>
+                                <div class="led"><img src="./modules/instruments/electribe/led_wave.png"></div>
+                                <div class="led"><img src="./modules/instruments/electribe/led_saw.png"></div>
+                            </div>
+                            <div class="dial mod_type">
+                                <h3>Mod Speed</h3>
+                                <div class="dial-inner">
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="electribe_section amp">
+                            <h2>Amp</h2>
+
+                            <div class="dial decay">
+                                <h3>Decay</h3>
+                                <div class="dial-inner">
+
+                                </div>
+                            </div>
+                            <div class="dial level">
+                                <h3>Level</h3>
+                                <div class="dial-inner">
+
+                                </div>
+                            </div>
+                            <div class="dial pan">
+                                <h3>Pan</h3>
+                                <div class="dial-inner">
+
+                                </div>
+                            </div>
+                            <div class="dial low_boost">
+                                <h3>Low Boost</h3>
+                                <div class="dial-inner">
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="electribe_section presets">
+                            <h2>Presets</h2>
+                        </div>
+
+                        <div class="electribe_section untitled">
+                            <div class="btn_rect_horizontal motion_seq">
+                                <h3>Motion Seq</h3>
+                                <div class="led">Smooth</div>
+                                <div class="led">Trig Hold</div>
+                            </div>
+                        </div>
+
+                        <div class="electribe_section delay">
+                            <h2>Delay</h2>
+
+                            <div class="btn_rect_horizontal delay_type">
+                                <h3>Type</h3>
+                                <div class="led">Mot Seq</div>
+                                <div class="led">Tempo Dly</div>
+                            </div>
+
+                            <div class="dial delay_depth">
+                                <h3>Depth</h3>
+                                <div class="dial-inner">
+
+                                </div>
+                            </div>
+                            <div class="dial delay_time">
+                                <h3>Time</h3>
+                                <div class="dial-inner">
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="electribe_section sounds">
+
+                            <div class="sounds_row1">
+                                <div class="btn_rect_square cross_mod">
+                                    <h3>Cross Mod</h3>
+                                </div>
+
+                                <div class="btn_rect_square ring_mod">
+                                    <h3>Ring Mod</h3>
+                                </div>
+
+                                <div class="btn_rect_square snd_crash">
+                                    <h3>Crash</h3>
+                                </div>
+
+                                <div class="btn_rect_square snd_clap">
+                                    <h3>Clap</h3>
+                                </div>
+                            </div>
+
+                            <div class="sounds_row2">
+                                <div style="
+                                float: left;
+                                margin: 0 0 0 5px;
+                                border: 1px solid white;
+                                border-bottom: none;
+                                width: 56px;
+                                height: 5px;
+                                "></div>
+                                <div style="
+                                float: left;
+                                margin: 0 0 0 40px;
+                                border: 1px solid white;
+                                border-bottom: none;
+                                width: 88px;
+                                height: 5px;
+                                "></div>
+                            </div>
+
+                            <div class="sounds_row3">
+                                <div class="btn_rect_vertical snd_s1"></div>
+                                <div class="btn_rect_vertical snd_s2"></div>
+                                <div class="btn_rect_vertical snd_s3"></div>
+                                <div class="btn_rect_vertical snd_s4"></div>
+                                <div class="btn_rect_vertical snd_a1"></div>
+                                <div class="btn_rect_vertical snd_a2"></div>
+                                <div class="btn_rect_vertical snd_hihat_close"></div>
+                                <div class="btn_rect_vertical snd_hihat_open"></div>
+                                <div class="btn_rect_vertical snd_accent"></div>
+                            </div>
+
+                            <div class="sounds_row4">
+
+                                <!-- PERCUSSION SYNTHESIZER -->
+
+                                <div style="
+                                float: left;
+                                margin: 0 0 0 6px;
+                                border: 1px solid white;
+                                border-top: none;
+                                border-right: none;
+                                width: 8px;
+                                height: 5px;
+                                "></div>
+                                <div style="
+                                float: left;
+                                margin: 1px 0 0 5px;
+                                height: 5px;
+                                ">Percussion Synthesizer</div>
+                                <div style="
+                                float: left;
+                                margin: 0 0 0 5px;
+                                border: 1px solid white;
+                                border-top: none;
+                                border-left: none;
+                                width: 8px;
+                                height: 5px;
+                                "></div>
+
+                                <!-- AUDIO IN -->
+
+                                <div style="
+                                float: left;
+                                margin: 0 0 0 10px;
+                                border: 1px solid white;
+                                border-top: none;
+                                border-right: none;
+                                width: 6px;
+                                height: 5px;
+                                "></div>
+                                <div style="
+                                float: left;
+                                margin: 1px 0 0 5px;
+                                height: 5px;
+                                ">Audio In</div>
+                                <div style="
+                                float: left;
+                                margin: 0 0 0 5px;
+                                border: 1px solid white;
+                                border-top: none;
+                                border-left: none;
+                                width: 7px;
+                                height: 5px;
+                                "></div>
+
+                                <!-- HI-HAT -->
+
+                                <div style="
+                                float: left;
+                                margin: 0 0 0 10px;
+                                border: 1px solid white;
+                                border-top: none;
+                                border-right: none;
+                                width: 10px;
+                                height: 5px;
+                                "></div>
+                                <div style="
+                                float: left;
+                                margin: 1px 0 0 5px;
+                                height: 5px;
+                                ">Hi-Hat</div>
+                                <div style="
+                                float: left;
+                                margin: 0 0 0 5px;
+                                border: 1px solid white;
+                                border-top: none;
+                                border-left: none;
+                                width: 10px;
+                                height: 5px;
+                                "></div>
+                                <div style="
+                                float: left;
+                                margin: 1px 0 0 9px;
+                                height: 5px;
+                                ">Accent</div>
+                            </div>
+
+                            <div class="sounds_row5">
+                                <div>1</div>
+                                <div>2</div>
+                                <div>3</div>
+                                <div>4</div>
+                                <div>1</div>
+                                <div>2</div>
+                                <div>Close</div>
+                                <div>Open</div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
             <script type="text/x-config">{}</script>
         </div>
 
@@ -90,9 +361,13 @@
 
 
         <script type="text/javascript">
+
             /* CORE */
+            util = require('util');
             path = require('path');
             fs = require('fs');
+            events = require('events');
+            midi = require('midi')
 
             /* LIBS */
             $ = jQuery = require('./libs/jquery-2.2.3.min');
@@ -104,7 +379,9 @@
 
             /* SERVICES */
             require('./services/song.js');
+            require('./services/metronome.js');
             require('./services/midi-msgr.js');
+            require('./services/array-loop.js');
 
             /* MODULES */
             require('./modules/layout/layout.js');
@@ -114,6 +391,7 @@
             require('./modules/grid/grid.js');
             require('./modules/song/song.js');
             require('./modules/params/params.js');
+            require('./modules/instruments/instruments.js');
 
             Box.Application.init({
                 debug:true

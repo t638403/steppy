@@ -14,7 +14,9 @@
 }
 
 [data-module="song"] select,
-[data-module="song"] input[type="text"] {
+[data-module="song"] input[type="text"],
+[data-module="song"] input[type="number"]
+{
 	margin: 0 0 2px 0;
 	font-size: 10px;
 	line-height: 17px;
@@ -41,8 +43,9 @@
 [data-module="song"] .nav>li>a {
 	padding: 2px 3px;
 }
-[data-module="song"] input[type="text"] {
-
+[data-module="song"] input[type="text"],
+[data-module="song"] input[type="number"],
+{
 	padding: 0 0 0 5px;
 	margin: 0;
 	width: 100%

@@ -5,8 +5,22 @@ Box.Application.addService('song', function(application) {
 	var _ = application.getGlobal('_');
 	var path = application.getGlobal('path');
 	var fs = application.getGlobal('fs');
+	var midi = application.getGlobal('midi');
+
+	var metronome = application.getService('metronome').create(120);
+	var arrayLoop = application.getService('array-loop');
+	var midiMsgr = application.getService('midi-msgr');
 
 	var song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding:'utf8'}));
+
+	var loop;
+	var midiOut;
+	metronome.on('quarter', function(nr) {
+		var msgs = loop.next() || [];
+		msgs.forEach(function(msg) {
+			midiOut.sendMessage(msg);
+		});
+	});
 
 	var selectedInstrumentIndex = 0;
 	var currPattern = 0;
@@ -18,14 +32,71 @@ Box.Application.addService('song', function(application) {
 		new:function() {
 			song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding:'utf8'}));
 		},
-		name:function(n) {
-			if(n) {
-				song.name = n;
+		name:function(name) {
+			if(name) {
+				song.name = name;
 			}
 			return song.name;
 		},
+		bpm:function(bpm) {
+			if(bpm) {
+				song.bpm = Math.abs(bpm);
+				metronome.setBpm(song.bpm);
+			}
+			return song.bpm;
+		},
 		save:function(cb) {
 			fs.writeFile(path.join(__dirname, '../songs/'+song.name+'.json'), JSON.stringify(song), {encoding:'utf8'}, cb);
+		},
+		play:function() {
+			if(midiOut) {midiOut.closePort();}
+			metronome.stop();
+
+			var values = [];
+			var mappedKeys;
+			var maxPats = 0;
+			song.instruments.forEach(function(instr) {
+
+				var type = _.find(song['instrument-types'], {name:instr.type});
+				var hasMappedKeys = _.has(type, 'keys');
+				if(hasMappedKeys) {
+					mappedKeys = Object.keys(type.keys).reverse();
+				}
+				maxPats = Math.max(maxPats, instr.patterns.length);
+
+				instr.patterns.forEach(function(pat, patIndex) {
+					pat.notes.forEach(function(note) {
+						var noteX = ((patIndex * 16) + note.x);
+						values[noteX] = values[noteX] || [];
+						var noteNameNr;
+						if(hasMappedKeys) {
+							noteNameNr = mappedKeys[note.y];
+						} else {
+							noteNameNr = y2noteNr(note.y)
+						}
+						values[noteX].unshift(midiMsgr.noteOn(instr.ch, noteNameNr, Math.round(note.v * 127)));
+
+						var offIndex = (noteX + note.l);
+
+						// Make up for notes after pattern
+						if(offIndex >= maxPats * 16) {
+							offIndex -= (maxPats * 16);
+
+						}
+						values[offIndex] = values[offIndex] || [];
+						values[offIndex].unshift(midiMsgr.noteOff(instr.ch, noteNameNr, Math.round(note.v * 127)));
+					});
+				});
+			});
+
+			loop = arrayLoop.create(values);
+			midiOut = new midi.output();
+			midiOut.openPort(2);
+			metronome.start();
+		},
+		stop:function() {
+			if(midiOut) {midiOut.closePort();}
+			metronome.stop();
 		},
 		open:function(name, cb) {
 			fs.readFile(path.join(__dirname, '../songs/'+name+'.json'), {encoding:'utf8'}, function(err, data) {
@@ -204,6 +275,8 @@ Box.Application.addService('song', function(application) {
 
 	};
 
-
+	function y2noteNr(y) {
+		return 108 - y
+	}
 
 });
