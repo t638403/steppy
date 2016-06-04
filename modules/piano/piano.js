@@ -63,6 +63,7 @@ Box.Application.addModule('piano', function(context) {
                 isPressingKey = true;
                 var id = parseInt($this.data('id'));
 				song.instrument.key.setCurr(midiMsgr.noteNrToStr(id2notenr(id)));
+				song.instrument.key.down();
 				context.broadcast('pianokeypress', id2notenr(id));
                 keys[id].pressed = true;
                 render();
@@ -75,6 +76,7 @@ Box.Application.addModule('piano', function(context) {
         if(isPressingKey) {
             isPressingKey = false;
             keys.forEach(releaseKey);
+			song.instrument.key.up();
             render();
         }
     }
