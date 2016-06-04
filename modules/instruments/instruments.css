@@ -1,7 +1,9 @@
 [data-module="instruments"] {
 	position: absolute;
-	left: 0;
+	left: calc(100% - 400px); /* 100% - instruments */
 	top: 0;
+	width: 400px;
+	height: calc(100% - 20px); /* 100% - msgr */
 }
 
 [data-module="instruments"] .instrument-types {

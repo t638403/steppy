@@ -8,15 +8,8 @@ Box.Application.addModule('patterns', function (context) {
 		song;
 
 	return {
-		messages:['layout-part-A', 'instrumentchange'],
-		onmessage:function(name, data) {
-			if(name == 'layout-part-A') {
-				$elem.css(data);
-			}
-			if(name == 'instrumentchange') {
-				render();
-			}
-		},
+		messages:['instrumentchange'],
+		onmessage:onmessage,
 		init:init,
 		destroy:destroy,
 		onclick:onclick
@@ -81,6 +74,12 @@ Box.Application.addModule('patterns', function (context) {
 			}
 			$patterns.append($pattern);
 		});
+	}
+
+	function onmessage(name, data) {
+		if(name == 'instrumentchange') {
+			render();
+		}
 	}
 
 });

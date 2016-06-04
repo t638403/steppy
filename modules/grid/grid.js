@@ -27,7 +27,7 @@ Box.Application.addModule('grid', function(context) {
 		offsetY;
 
     return {
-		messages:['layout-part-C', 'patternchange', 'instrumentchange'],
+		messages:['patternchange', 'instrumentchange'],
         init:init,
         destroy:destroy,
         onmousedown:onmousedown,
@@ -35,11 +35,6 @@ Box.Application.addModule('grid', function(context) {
         onmousemove:_.throttle(onmousemove, 30),
         onclick:onclick,
 		onmessage:function onmessage(name, data) {
-			if(name == 'layout-part-C') {
-				$elem.css(data);
-				offsetX = parseInt($elem.css('left'));
-				offsetY = parseInt($elem.css('top'));
-			}
 			if(name == 'patternchange') {
 				render();
 			}

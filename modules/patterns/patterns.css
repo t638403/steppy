@@ -3,6 +3,7 @@
 	left: 0;
 	top: 0;
 	width: 200px;
+	height: calc(100% - (200px + 20px)); /* 100% - (song + msgr) */
 	overflow-x: hidden;
 	overflow-y: scroll;
 	background-color: #ddd;

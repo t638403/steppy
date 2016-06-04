@@ -6,22 +6,13 @@ Box.Application.addModule('song', function(context) {
 		params;
 
 	return {
-		messages:['layout-part-D', 'pianokeypress'],
+		messages:['pianokeypress'],
 		init:init,
 		destroy:destroy,
 		onchange:onchange,
 		onclick:onclick,
 		ondblclick:ondblclick,
-		onmessage:function onmessage(name, data) {
-			if(name == 'layout-part-D') {
-				$elem.css(data).css(data);
-				$elem.height(data.height + 15);
-			}
-			if(name == 'pianokeypress') {
-				song.instrument.param.setCurr(0);
-				render();
-			}
-		}
+		onmessage:onmessage
 	};
 
 	function init() {
@@ -146,4 +137,12 @@ Box.Application.addModule('song', function(context) {
 		});
 		$params.val($params.find('option:first').val());
 	}
+
+	function onmessage(name, data) {
+		if(name == 'pianokeypress') {
+			song.instrument.param.setCurr(0);
+			render();
+		}
+	}
+
 });

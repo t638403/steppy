@@ -8,7 +8,7 @@ Box.Application.addModule('instruments', function(context) {
 		types;
 
 	return {
-		messages:['layout-part-H'],
+		messages:[],
 		onmessage:onmessage,
 		init:init,
 		destroy:destroy
@@ -20,8 +20,6 @@ Box.Application.addModule('instruments', function(context) {
 		song = context.getService('song');
 		types = song.instrument.list().map(function(instr){return song.instrument.type.getByName(instr.type);});
 
-		console.log(types[0])
-
 	}
 
 	function destroy() {
@@ -29,9 +27,5 @@ Box.Application.addModule('instruments', function(context) {
 		$elem = null;
 	}
 
-	function onmessage(name, data) {
-		if(name == 'layout-part-H') {
-			$elem.css(data);
-		}
-	}
+	function onmessage(name, data) {}
 });

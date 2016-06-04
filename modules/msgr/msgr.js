@@ -6,7 +6,7 @@ Box.Application.addModule('msgr', function(context) {
 		duration;
 
 	return {
-		messages:['ok', 'error', 'warning', 'info', 'layout-part-G'],
+		messages:['ok', 'error', 'warning', 'info'],
 		init:init,
 		destroy:destroy,
 		onmessage:onmessage
@@ -56,9 +56,6 @@ Box.Application.addModule('msgr', function(context) {
 				$elem.addClass('info');
 				$msg.html(data);
 				setTimeout(hideMsg, duration);
-				break;
-			case 'layout-part-G':
-				$elem.css(data).css(data);
 				break;
 		}
 	}

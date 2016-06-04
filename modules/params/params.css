@@ -1,10 +1,10 @@
 [data-module="params"] {
 	position: absolute;
 	background-color: #ddd;
-	top: 0;
-	left: 0;
-	width: 850px;
-	height: 215px;
+	top: calc(100% - (200px + 20px)); /* 100% - (params + msgr) */
+	left: calc(200px + 50px); /* song + empty space */
+	width: calc(100% - (200px + 50px + 400px)); /* 100% - (song + empty space + instruments) */
+	height: 200px;
 	overflow-x: scroll;
 	overflow-y: hidden;
 }

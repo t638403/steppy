@@ -3,6 +3,10 @@
 	background-color: white;
 	font-size: 10px;
 	overflow: hidden;
+	left: 0;
+	top: calc(100% - (200px + 20px)); /* 100% - (song + msgr) */
+	height: 200px;
+	width: 200px;
 }
 
 [data-module="song"] table {

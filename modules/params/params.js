@@ -7,31 +7,11 @@ Box.Application.addModule('params', function(context) {
 		song;
 
 	return {
-		messages:['layout-part-F', 'gridscroll', 'patternchange', 'paramchange', 'instrumentchange'],
+		messages:['gridscroll', 'patternchange', 'paramchange', 'instrumentchange'],
 		init:init,
 		destroy:destroy,
 		onclick:onclick,
-		onmessage:function onmessage(name, data) {
-			if(name == 'layout-part-F') {
-				$elem.css(data).css(data);
-				$elem.height(data.height + 15);
-			}
-			if(name == 'gridscroll') {
-				$elem.scrollLeft(data.left);
-			}
-			if(name == 'patternchange') {
-				render();
-			}
-			if(name == 'paramchange') {
-				render();
-			}
-			if(name == 'instrumentchange') {
-				render();
-			}
-			if(name == 'pianokeypress') {
-				render();
-			}
-		}
+		onmessage:onmessage
 	};
 
 	function init() {
@@ -111,6 +91,24 @@ Box.Application.addModule('params', function(context) {
 		$params.html('');
 		$params.width(song.pattern.length() * cfg.x);
 		_.range(song.pattern.length()).forEach(renderParam);
+	}
+
+	function onmessage(name, data) {
+		if(name == 'gridscroll') {
+			$elem.scrollLeft(data.left);
+		}
+		if(name == 'patternchange') {
+			render();
+		}
+		if(name == 'paramchange') {
+			render();
+		}
+		if(name == 'instrumentchange') {
+			render();
+		}
+		if(name == 'pianokeypress') {
+			render();
+		}
 	}
 
 });

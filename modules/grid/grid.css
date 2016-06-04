@@ -1,12 +1,13 @@
 [data-module="grid"] {    
     position: absolute;
-    left: 0;
+    left: calc(200px + 50px); /* patterns + piano */
     top: 0;
-    width: 500px;
-    height: 500px;
+    width: calc(100% - (200px + 50px + 400px)); /* 100% - (patterns + piano + instruments) */
+    height: calc(100% - (200px + 20px)); /* 100% - (params + msgr) */
 	overflow-y: scroll;
 	overflow-x: scroll;
 	background-color: #ddd;
+	z-index: 2;
 }
 
 [data-type="grid"] {

@@ -11,27 +11,12 @@ Box.Application.addModule('piano', function(context) {
 		mappedKeys;
 
     return {
-		messages:['layout-part-B', 'gridscroll', 'instrumentchange'],
+		messages:['gridscroll', 'instrumentchange'],
         init:init,
         destroy:destroy,
         onmousedown:onmousedown,
         onmouseup:onmouseup,
-		onmessage:function onmessage(name, data) {
-			if(name == 'layout-part-B') {
-				$elem.css(data).css('width', (data.width + 15) + 'px');
-			}
-			if(name == 'gridscroll') {
-				$elem.scrollTop(data.top);
-			}
-			if(name == 'instrumentchange') {
-				var type = song.instrument.type.curr();
-				mappedKeys = _.has(type, 'keys')?type.keys: null;
-				if(mappedKeys) {
-					song.instrument.key.setCurr(Object.keys(mappedKeys)[0]);
-				}
-				render();
-			}
-		}
+		onmessage:onmessage
     };
 
     function init() {
@@ -130,7 +115,7 @@ Box.Application.addModule('piano', function(context) {
 			if(song.instrument.key.getCurr() == noteStr) {
 				$key.addClass('curr');
 			}
-			$piano.prepend($key);
+			$piano.append($key);
 		}
 		$key.css('line-height', cfg.y + 'px');
 
@@ -148,4 +133,18 @@ Box.Application.addModule('piano', function(context) {
         	$piano.append($key);
 		}
     }
+
+	function onmessage(name, data) {
+		if(name == 'gridscroll') {
+			$elem.scrollTop(data.top);
+		}
+		if(name == 'instrumentchange') {
+			var type = song.instrument.type.curr();
+			mappedKeys = _.has(type, 'keys')?type.keys: null;
+			if(mappedKeys) {
+				song.instrument.key.setCurr(Object.keys(mappedKeys)[0]);
+			}
+			render();
+		}
+	}
 });
