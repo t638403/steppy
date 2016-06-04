@@ -89,6 +89,11 @@ Box.Application.addService('song', function(application) {
 				});
 			});
 
+			var trailingEmptyness = ((maxPats * 16) - values.length);
+			for(var i=0; i<trailingEmptyness; i++) {
+				values.push(undefined);
+			}
+
 			loop = arrayLoop.create(values);
 			midiOut = new midi.output();
 			midiOut.openPort(2);
