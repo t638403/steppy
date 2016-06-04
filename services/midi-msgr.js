@@ -9,6 +9,7 @@ Box.Application.addService('midi-msgr', function(application) {
 		noteOn:noteOn,
 		noteOff:noteOff,
 		ctrlChange:ctrChange,
+		nrpn:nrpn,
 		programChange:programChange,
 		bankSelectMsb:bankSelectMsb,
 		bankSelectLsb:bankSelectLsb,
@@ -50,6 +51,31 @@ Box.Application.addService('midi-msgr', function(application) {
 		var Bn = parseInt('0xB0', 16) + (channelNr - 1);
 		if(!_.isNumber(Bn) || Bn < 176 || Bn > 191) {throw new Error('Ctr Bn index out of bounds, must be 176-191');}
 		return [Bn, ctrl, value];
+	}
+
+	/**
+	 * Send an NRPN (non registered param number). For electribe, dm is the value of the param.
+	 *
+	 * @param channelNr {number} midi channel number
+	 * @param nm {string|number} param msb
+	 * @param nl {string|number} param lsb
+	 * @param dm {string|number} value msb
+	 * @param dl {string|number} value lsb
+	 * @returns {array} An array of 4 messages
+	 */
+	function nrpn(channelNr, nm, nl, dm, dl) {
+		var Bn = 175 + channelNr;
+		var LSB = parseInt('0x62', 16);
+		var MSB = parseInt('0x63', 16);
+		var DataEntryMSB = parseInt('0x06', 16);
+		var DataEntryLSB = parseInt('0x26', 16);
+
+		return [
+			[Bn, MSB, _.isString(nm)?parseInt(nm, 16):nm],
+			[Bn, LSB, _.isString(nl)?parseInt(nl, 16):nl],
+			[Bn, DataEntryMSB, _.isString(dm)?parseInt(dm, 16):dm],
+			[Bn, DataEntryLSB, _.isString(dl)?parseInt(dl, 16):dl]
+		];
 	}
 
 	function programChange(channelNr, v) {
