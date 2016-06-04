@@ -7,7 +7,6 @@
 	overflow-y: scroll;
 	overflow-x: scroll;
 	background-color: #ddd;
-	z-index: 2;
 }
 
 [data-type="grid"] {
