@@ -1,4 +1,4 @@
-Box.Application.addService('song', function(application) {
+Box.Application.addService('song', function (application) {
 
 	"use strict";
 
@@ -11,13 +11,13 @@ Box.Application.addService('song', function(application) {
 	var arrayLoop = application.getService('array-loop');
 	var midiMsgr = application.getService('midi-msgr');
 
-	var song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding:'utf8'}));
+	var song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding: 'utf8'}));
 
 	var loop;
 	var midiOut;
-	metronome.on('quarter', function(nr) {
+	metronome.on('quarter', function (nr) {
 		var msgs = loop.next() || [];
-		msgs.forEach(function(msg) {
+		msgs.forEach(function (msg) {
 			midiOut.sendMessage(msg);
 		});
 	});
@@ -29,47 +29,49 @@ Box.Application.addService('song', function(application) {
 
 
 	return {
-		new:function() {
-			song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding:'utf8'}));
+		new: function () {
+			song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding: 'utf8'}));
 		},
-		name:function(name) {
-			if(name) {
+		name: function (name) {
+			if (name) {
 				song.name = name;
 			}
 			return song.name;
 		},
-		bpm:function(bpm) {
-			if(bpm) {
+		bpm: function (bpm) {
+			if (bpm) {
 				song.bpm = Math.abs(bpm);
 				metronome.setBpm(song.bpm);
 			}
 			return song.bpm;
 		},
-		save:function(cb) {
-			fs.writeFile(path.join(__dirname, '../songs/'+song.name+'.json'), JSON.stringify(song), {encoding:'utf8'}, cb);
+		save: function (cb) {
+			fs.writeFile(path.join(__dirname, '../songs/' + song.name + '.json'), JSON.stringify(song), {encoding: 'utf8'}, cb);
 		},
-		play:function() {
-			if(midiOut) {midiOut.closePort();}
+		play: function () {
+			if (midiOut) {
+				midiOut.closePort();
+			}
 			metronome.stop();
 
 			var values = [];
 			var mappedKeys;
 			var maxPats = 0;
-			song.instruments.forEach(function(instr) {
+			song.instruments.forEach(function (instr) {
 
-				var type = _.find(song['instrument-types'], {name:instr.type});
+				var type = _.find(song['instrument-types'], {name: instr.type});
 				var hasMappedKeys = _.has(type, 'keys');
-				if(hasMappedKeys) {
+				if (hasMappedKeys) {
 					mappedKeys = Object.keys(type.keys).reverse();
 				}
 				maxPats = Math.max(maxPats, instr.patterns.length);
 
-				instr.patterns.forEach(function(pat, patIndex) {
-					pat.notes.forEach(function(note) {
+				instr.patterns.forEach(function (pat, patIndex) {
+					pat.notes.forEach(function (note) {
 						var noteX = ((patIndex * 16) + note.x);
 						values[noteX] = values[noteX] || [];
 						var noteNameNr;
-						if(hasMappedKeys) {
+						if (hasMappedKeys) {
 							noteNameNr = mappedKeys[note.y];
 						} else {
 							noteNameNr = y2noteNr(note.y)
@@ -78,19 +80,45 @@ Box.Application.addService('song', function(application) {
 
 						var offIndex = (noteX + note.l);
 
-						// Make up for notes after pattern
-						if(offIndex >= maxPats * 16) {
+						// Make up for note releases after pattern end
+						if (offIndex >= maxPats * 16) {
 							offIndex -= (maxPats * 16);
 
 						}
 						values[offIndex] = values[offIndex] || [];
 						values[offIndex].unshift(midiMsgr.noteOff(instr.ch, noteNameNr, Math.round(note.v * 127)));
 					});
+
+					pat.params.forEach(function (paramValues, index) {
+						if(paramValues==null) {return;}
+						var paramType = type.params[index];
+						var isNrpn = paramType.type == 'nrpn';
+						var isCC = paramType.type == 'cc';
+						paramValues.forEach(function (paramValue) {
+							if(paramValue == null) {return;}
+							var paramX = ((patIndex * 16) + paramValue.x);
+							values[paramX] = values[paramX] || [];
+							if (isCC) {
+								values[paramX] = midiMsgr.ctrlChange(instr.ch, paramType.cc, Math.round(paramValue.v * 127));
+							}
+							if (isNrpn) {
+								var dm = Math.round(paramValue.v * 127);
+								var msgs = midiMsgr.nrpn(instr.ch, paramType.nm, paramType.nl, dm, paramType.dl);
+								msgs.reverse();
+								msgs.forEach(function (msg) {
+									values[paramX].unshift(msg);
+								});
+							}
+						});
+					});
+
 				});
 			});
 
+			// You don't want to end the last pattern after the last note, in stead fill up with nothing untill pattern
+			// end is reached. e.g. total song must be devidable by 16 (pattern length)
 			var trailingEmptyness = ((maxPats * 16) - values.length);
-			for(var i=0; i<trailingEmptyness; i++) {
+			for (var i = 0; i < trailingEmptyness; i++) {
 				values.push(undefined);
 			}
 
@@ -99,13 +127,15 @@ Box.Application.addService('song', function(application) {
 			midiOut.openPort(2);
 			metronome.start();
 		},
-		stop:function() {
-			if(midiOut) {midiOut.closePort();}
+		stop: function () {
+			if (midiOut) {
+				midiOut.closePort();
+			}
 			metronome.stop();
 		},
-		open:function(name, cb) {
-			fs.readFile(path.join(__dirname, '../songs/'+name+'.json'), {encoding:'utf8'}, function(err, data) {
-				if(err) {
+		open: function (name, cb) {
+			fs.readFile(path.join(__dirname, '../songs/' + name + '.json'), {encoding: 'utf8'}, function (err, data) {
+				if (err) {
 					cb(err);
 				} else {
 					try {
@@ -115,131 +145,131 @@ Box.Application.addService('song', function(application) {
 						currKey = 'C4';
 						currParam = 0;
 						cb();
-					} catch(err) {
+					} catch (err) {
 						cb(err);
 					}
 				}
 			});
 		},
-		instrument:{
-			list:function() {
+		instrument: {
+			list: function () {
 				return song.instruments;
 			},
-			getSelectedInstrument:function() {
+			getSelectedInstrument: function () {
 				return song.instruments[selectedInstrumentIndex];
 			},
-			getSelectedInstrumentIndex:function() {
+			getSelectedInstrumentIndex: function () {
 				return selectedInstrumentIndex;
 			},
-			setSelectedInstrumentIndex:function(index) {
+			setSelectedInstrumentIndex: function (index) {
 				selectedInstrumentIndex = index;
 				currParam = 0;
 			},
-			type:{
-				getByName:function(name) {
-					return _.find(song['instrument-types'], {name:name})
+			type: {
+				getByName: function (name) {
+					return _.find(song['instrument-types'], {name: name})
 				},
-				curr:function() {
-					return _.find(song['instrument-types'], {name:song.instruments[selectedInstrumentIndex].type})
+				curr: function () {
+					return _.find(song['instrument-types'], {name: song.instruments[selectedInstrumentIndex].type})
 				}
 			},
-			key:{
-				setCurr:function(k) {
+			key: {
+				setCurr: function (k) {
 					currKey = k;
 				},
-				getCurr:function() {
+				getCurr: function () {
 					return currKey;
 				}
 			},
-			param:{
-				getCurr:function(){
+			param: {
+				getCurr: function () {
 					return currParam;
 				},
-				setCurr:function(p) {
+				setCurr: function (p) {
 					currParam = p;
 				}
 			}
 		},
-		pattern : {
-			list:function(){
+		pattern: {
+			list: function () {
 				return song.instruments[selectedInstrumentIndex].patterns;
 			},
-			newOrder:function(newOrder) {
+			newOrder: function (newOrder) {
 				var patterns = _.cloneDeep(song.instruments[selectedInstrumentIndex].patterns);
 				var currPatternIsSet = false;
-				newOrder.forEach(function(oldIndex, index) {
-					if(!currPatternIsSet && oldIndex == currPattern) {
+				newOrder.forEach(function (oldIndex, index) {
+					if (!currPatternIsSet && oldIndex == currPattern) {
 						currPattern = index;
 						currPatternIsSet = true;
 					}
 					song.instruments[selectedInstrumentIndex].patterns[index] = patterns[oldIndex];
 				});
 			},
-			duplicate: function(index) {
+			duplicate: function (index) {
 				var len = song.instruments[selectedInstrumentIndex].patterns.length;
 				var duplicate = _.cloneDeep(song.instruments[selectedInstrumentIndex].patterns[index]);
 				song.instruments[selectedInstrumentIndex].patterns.splice(index, 0, duplicate);
 				song.instruments[selectedInstrumentIndex].patterns[index + 1].name = 'Pattern ' + len;
 				currPattern = index + 1;
 			},
-			remove:function(index) {
+			remove: function (index) {
 				song.instruments[selectedInstrumentIndex].patterns.splice(index, 1);
 				currPattern = index - 1;
-				if(currPattern<0) currPattern = 0;
-				if(song.instruments[selectedInstrumentIndex].patterns.length == 0) {
+				if (currPattern < 0) currPattern = 0;
+				if (song.instruments[selectedInstrumentIndex].patterns.length == 0) {
 					song.instruments[selectedInstrumentIndex].patterns = [
 						{
-							"name":"Pattern 0",
-							"notes":[],
-							"params":[]
+							"name": "Pattern 0",
+							"notes": [],
+							"params": []
 						}
 					];
 				}
 			},
-			setCurrIndex:function(index) {
+			setCurrIndex: function (index) {
 				currPattern = index;
 			},
-			getCurr:function() {
+			getCurr: function () {
 				return song.instruments[selectedInstrumentIndex].patterns[currPattern];
 			},
-			getCurrIndex:function() {
+			getCurrIndex: function () {
 				return currPattern;
 			},
-			length:function() {
+			length: function () {
 				return song.instruments[selectedInstrumentIndex].patterns[currPattern].length || 16;
 			},
-			getParams:function() {
+			getParams: function () {
 				return song.instruments[selectedInstrumentIndex].patterns[currPattern].params[currParam] || [];
 			},
-			createParam: function(p, i) {
-				if(!song.instruments[selectedInstrumentIndex].patterns[currPattern].params[currParam]) {
+			createParam: function (p, i) {
+				if (!song.instruments[selectedInstrumentIndex].patterns[currPattern].params[currParam]) {
 					song.instruments[selectedInstrumentIndex].patterns[currPattern].params[currParam] = [];
 				}
 				song.instruments[selectedInstrumentIndex].patterns[currPattern].params[currParam][i] = p;
 			},
-			removeParam:function(i) {
-				if(!song.instruments[selectedInstrumentIndex].patterns[currPattern].params[currParam]) {
+			removeParam: function (i) {
+				if (!song.instruments[selectedInstrumentIndex].patterns[currPattern].params[currParam]) {
 					song.instruments[selectedInstrumentIndex].patterns[currPattern].params[currParam] = [];
 				}
 				song.instruments[selectedInstrumentIndex].patterns[currPattern].params[currParam][i] = undefined;
 			},
-			getNotes:function() {
+			getNotes: function () {
 				return song.instruments[selectedInstrumentIndex].patterns[currPattern].notes;
 			},
-			setNotes: function(newNotes) {
+			setNotes: function (newNotes) {
 				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes = newNotes;
 			},
-			deleteNotes:function() {
-				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes = song.instruments[selectedInstrumentIndex].patterns[currPattern].notes.reduce(function(notes, note, id) {
-					if(!note.selected) {
+			deleteNotes: function () {
+				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes = song.instruments[selectedInstrumentIndex].patterns[currPattern].notes.reduce(function (notes, note, id) {
+					if (!note.selected) {
 						notes.push(note);
 					}
 					return notes;
 				}, []);
 			},
-			setNoteLengths:function(l) {
-				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes.forEach(function(n, id) {
-					if(n.selected) {
+			setNoteLengths: function (l) {
+				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes.forEach(function (n, id) {
+					if (n.selected) {
 						song.instruments[selectedInstrumentIndex].patterns[currPattern].notes[id].l = l;
 					}
 				});
@@ -247,33 +277,33 @@ Box.Application.addService('song', function(application) {
 			// Add a note to the notes array
 			createNote: function (x, y) {
 				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes.push({
-					x:x,
-					y:y,
-					v:1.0,
-					l:1.0,
-					selected:true
+					x: x,
+					y: y,
+					v: 1.0,
+					l: 1.0,
+					selected: true
 				});
 			},
-			deselectAll:function() {
-				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes.forEach(function(n, id) {
+			deselectAll: function () {
+				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes.forEach(function (n, id) {
 					song.instruments[selectedInstrumentIndex].patterns[currPattern].notes[id].selected = false;
 				});
 			},
-			selectNote: function(id) {
+			selectNote: function (id) {
 				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes[id].selected = true;
 			},
-			isSelectedNote: function(id) {
+			isSelectedNote: function (id) {
 				return song.instruments[selectedInstrumentIndex].patterns[currPattern].notes[id].selected;
 			},
 			deselectNote: function deselectNote(id) {
 				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes[id].selected = false;
 			},
-			toggleNoteSelection: function(id) {
+			toggleNoteSelection: function (id) {
 				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes[id].selected = !song.instruments[selectedInstrumentIndex].patterns[currPattern].notes[id].selected;
 			},
-			logNotes:function() {
+			logNotes: function () {
 				song.instruments[selectedInstrumentIndex].patterns[currPattern].notes.forEach(function logNote(n, id) {
-					console.log('{x:'+n.x+',y:'+n.y+',v:'+n.v+',l:'+n.l+'}');
+					console.log('{x:' + n.x + ',y:' + n.y + ',v:' + n.v + ',l:' + n.l + '}');
 				});
 			}
 		}
