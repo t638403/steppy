@@ -27,6 +27,19 @@
           "params":{}
         }
       ]
+    },
+    {
+      "name":"AN1X Instr 0",
+      "device":0,
+      "ch":5,
+      "type":"XL-1",
+      "patterns":[
+        {
+          "name":"Pattern 0",
+          "notes":[],
+          "params":{}
+        }
+      ]
     }
   ],
   "instrument-types": [
@@ -711,6 +724,10 @@
           "dl": "0x67"
         }
       ]
+    },
+    {
+      "name": "AN1X",
+      "params":[]
     }
   ]
 }
