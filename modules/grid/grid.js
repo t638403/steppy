@@ -336,6 +336,7 @@ Box.Application.addModule('grid', function(context) {
         var $noteInner = $('<div class="note-inner" ondragstart="return false;"/>');
         var $rightResizeHandle = $('<div class="right-resize-handle" ondragstart="return false;"/>');
         $note.append($noteInner);
+		$noteInner.append($('<span class="velocity"/>').text(Math.round(n.v * 127)));
         $noteInner.append($rightResizeHandle);
 
         $note.width(n.l * cfg.x);
@@ -352,6 +353,19 @@ Box.Application.addModule('grid', function(context) {
         
         $note.css('left', (n.x * cfg.x) + 'px');
         $note.css('top', (n.y * cfg.y) + 'px');
+
+		$note.on('wheel', function(e) {
+			var noteId = parseInt($note.data('id'));
+			var note = song.pattern.getNotes()[noteId];
+			if(e.originalEvent.wheelDeltaY > 0) {
+				note.v += 4/127
+			} else {
+				note.v -= 4/127;
+			}
+			if(note.v > 1) {note.v = 1}
+			if(note.v < 0) {note.v = 0}
+			$note.find('.velocity').text(Math.round(note.v * 127))
+		});
     }
 
     // normalize distance v with respect to grid config. use method none to prevent snapping, use floor/ceil to snap

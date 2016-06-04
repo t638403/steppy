@@ -36,6 +36,19 @@
     height: 21px;
     border: 2px solid rgba(255,255,255,.2);
     border-right-width: 0;
+	font-size: 8px;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+[data-type="grid"] [data-type="note"] .note-inner .velocity {
+	display: block;
+	float: left;
+	margin-top: -1px;
+	color: white;
 }
 
 [data-type="grid"] [data-type="note"] .right-resize-handle {
