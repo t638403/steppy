@@ -26,6 +26,10 @@
 	cursor: pointer;
 }
 
+[data-module="patterns"] ul.patterns [data-type="pattern"].playing {
+	animation: blinking 2s linear infinite;
+}
+
 [data-module="patterns"] ul.patterns [data-type="pattern"] .pattern-inner {
 	border-top: 1px solid #ddd;
 	font-size: 10px;
@@ -43,4 +47,13 @@
 	border-width: 2px;
 	float: right;
 	margin-top: 2px;
+}
+
+@keyframes blinking {
+	from {
+		background-color: white;
+	}
+	to {
+		background-color: yellow;
+	}
 }

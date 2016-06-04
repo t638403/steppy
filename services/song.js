@@ -54,75 +54,24 @@ Box.Application.addService('song', function (application) {
 			}
 			metronome.stop();
 
-			var values = [];
-			var mappedKeys;
+			var midiMessages = [];
 			var maxPats = 0;
 			song.instruments.forEach(function (instr) {
 
-				var type = _.find(song['instrument-types'], {name: instr.type});
-				var hasMappedKeys = _.has(type, 'keys');
-				if (hasMappedKeys) {
-					mappedKeys = Object.keys(type.keys).reverse();
-				}
+				var instrumentType = _.find(song['instrument-types'], {name: instr.type});
 				maxPats = Math.max(maxPats, instr.patterns.length);
 
-				instr.patterns.forEach(function (pat, patIndex) {
-					pat.notes.forEach(function (note) {
-						var noteX = ((patIndex * 16) + note.x);
-						values[noteX] = values[noteX] || [];
-						var noteNameNr;
-						if (hasMappedKeys) {
-							noteNameNr = mappedKeys[note.y];
-						} else {
-							noteNameNr = y2noteNr(note.y)
-						}
-						values[noteX].unshift(midiMsgr.noteOn(instr.ch, noteNameNr, Math.round(note.v * 127)));
-
-						var offIndex = (noteX + note.l);
-
-						// Make up for note releases after pattern end
-						if (offIndex >= maxPats * 16) {
-							offIndex -= (maxPats * 16);
-
-						}
-						values[offIndex] = values[offIndex] || [];
-						values[offIndex].unshift(midiMsgr.noteOff(instr.ch, noteNameNr, Math.round(note.v * 127)));
-					});
-
-					pat.params.forEach(function (paramValues, index) {
-						if(paramValues==null) {return;}
-						var paramType = type.params[index];
-						var isNrpn = paramType.type == 'nrpn';
-						var isCC = paramType.type == 'cc';
-						paramValues.forEach(function (paramValue) {
-							if(paramValue == null) {return;}
-							var paramX = ((patIndex * 16) + paramValue.x);
-							values[paramX] = values[paramX] || [];
-							if (isCC) {
-								values[paramX] = midiMsgr.ctrlChange(instr.ch, paramType.cc, Math.round(paramValue.v * 127));
-							}
-							if (isNrpn) {
-								var dm = Math.round(paramValue.v * 127);
-								var msgs = midiMsgr.nrpn(instr.ch, paramType.nm, paramType.nl, dm, paramType.dl);
-								msgs.reverse();
-								msgs.forEach(function (msg) {
-									values[paramX].unshift(msg);
-								});
-							}
-						});
-					});
-
-				});
+				instr.patterns.forEach(playPattern(instr.ch, instrumentType, midiMessages, maxPats));
 			});
 
 			// You don't want to end the last pattern after the last note, in stead fill up with nothing untill pattern
 			// end is reached. e.g. total song must be devidable by 16 (pattern length)
-			var trailingEmptyness = ((maxPats * 16) - values.length);
+			var trailingEmptyness = ((maxPats * 16) - midiMessages.length);
 			for (var i = 0; i < trailingEmptyness; i++) {
-				values.push(undefined);
+				midiMessages.push(undefined);
 			}
 
-			loop = arrayLoop.create(values);
+			loop = arrayLoop.create(midiMessages);
 			midiOut = new midi.output();
 			midiOut.openPort(2);
 			metronome.start();
@@ -191,6 +140,37 @@ Box.Application.addService('song', function (application) {
 			}
 		},
 		pattern: {
+			play: function() {
+
+				if (midiOut) {
+					midiOut.closePort();
+				}
+				metronome.stop();
+
+				var instrument = song.instruments[selectedInstrumentIndex];
+				var instrumentType = _.find(song['instrument-types'], {name: instrument.type});
+				var midiMessages = [];
+				var maxPats = 1;
+				playPattern(instrument.ch, instrumentType, midiMessages, maxPats)(instrument.patterns[currPattern]);
+
+				// You don't want to end the last pattern after the last note, in stead fill up with nothing untill pattern
+				// end is reached. e.g. total song must be devidable by 16 (pattern length)
+				var trailingEmptyness = ((maxPats * 16) - midiMessages.length);
+				for (var i = 0; i < trailingEmptyness; i++) {
+					midiMessages.push(undefined);
+				}
+
+				loop = arrayLoop.create(midiMessages);
+				midiOut = new midi.output();
+				midiOut.openPort(2);
+				metronome.start();
+			},
+			stop: function () {
+				if (midiOut) {
+					midiOut.closePort();
+				}
+				metronome.stop();
+			},
 			list: function () {
 				return song.instruments[selectedInstrumentIndex].patterns;
 			},
@@ -313,5 +293,74 @@ Box.Application.addService('song', function (application) {
 	function y2noteNr(y) {
 		return 108 - y
 	}
+
+	/**
+	 * Play a pattern
+	 *
+	 * @param midiChannel {number} The midi channel
+	 * @param instrumentType {object} An instrument type as defined in song.json
+	 * @param midiMessages {array} The array with midi messages for each tick/step
+	 * @param maxPats {number} The number of patterns from the instruments with the most patterns
+	 * @returns {Function} callback for for each loop
+	 */
+	function playPattern(midiChannel, instrumentType, midiMessages, maxPats) {
+
+		var mappedKeys;
+		var hasMappedKeys = _.has(instrumentType, 'keys');
+		if (hasMappedKeys) {
+			mappedKeys = Object.keys(instrumentType.keys).reverse();
+		}
+
+		return function (pat, patIndex) {
+			var patIndex = _.isUndefined(patIndex)?0:patIndex;
+
+			pat.notes.forEach(function (note) {
+				var noteX = ((patIndex * 16) + note.x);
+				midiMessages[noteX] = midiMessages[noteX] || [];
+				var noteNameNr;
+				if (hasMappedKeys) {
+					noteNameNr = mappedKeys[note.y];
+				} else {
+					noteNameNr = y2noteNr(note.y)
+				}
+				midiMessages[noteX].unshift(midiMsgr.noteOn(midiChannel, noteNameNr, Math.round(note.v * 127)));
+
+				var offIndex = (noteX + note.l);
+
+				// Make up for note releases after pattern end
+				if (offIndex >= maxPats * 16) {
+					offIndex -= (maxPats * 16);
+
+				}
+				midiMessages[offIndex] = midiMessages[offIndex] || [];
+				midiMessages[offIndex].unshift(midiMsgr.noteOff(midiChannel, noteNameNr, Math.round(note.v * 127)));
+			});
+
+			pat.params.forEach(function (paramValues, index) {
+				if(paramValues==null) {return;}
+				var paramType = instrumentType.params[index];
+				var isNrpn = paramType.type == 'nrpn';
+				var isCC = paramType.type == 'cc';
+				paramValues.forEach(function (paramValue) {
+					if(paramValue == null) {return;}
+					var paramX = ((patIndex * 16) + paramValue.x);
+					midiMessages[paramX] = midiMessages[paramX] || [];
+					if (isCC) {
+						midiMessages[paramX] = midiMsgr.ctrlChange(midiChannel, paramType.cc, Math.round(paramValue.v * 127));
+					}
+					if (isNrpn) {
+						var dm = Math.round(paramValue.v * 127);
+						var msgs = midiMsgr.nrpn(midiChannel, paramType.nm, paramType.nl, dm, paramType.dl);
+						msgs.reverse();
+						msgs.forEach(function (msg) {
+							midiMessages[paramX].unshift(msg);
+						});
+					}
+				});
+			});
+		}
+	}
+
+
 
 });

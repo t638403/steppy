@@ -5,6 +5,9 @@ Box.Application.addModule('patterns', function (context) {
 	var $,
 		$elem,
 		$patterns,
+		$tplPattern,
+
+		playingPatternIndex,
 		song;
 
 	return {
@@ -19,6 +22,9 @@ Box.Application.addModule('patterns', function (context) {
 		$ = context.getGlobal('jQuery');
 		$elem = $(context.getElement());
 		$patterns = $elem.find('.patterns');
+		$tplPattern = $($elem.find('template#patterns-li').html());
+
+		playingPatternIndex = null;
 		song = context.getService('song');
 
 		$patterns.multisortable({
@@ -62,13 +68,33 @@ Box.Application.addModule('patterns', function (context) {
 				context.broadcast('patternchange');
 				render();
 				break;
+			case 'play-btn':
+				var $pattern = $this.closest('[data-type="pattern"]');
+				var patternId = parseInt($pattern.data('id'));
+				song.pattern.setCurrIndex(patternId);
+				context.broadcast('patternchange');
+				if(playingPatternIndex == patternId) {
+					song.pattern.stop();
+					playingPatternIndex = null;
+				} else {
+					song.pattern.play();
+					playingPatternIndex = patternId;
+				}
+				render();
+				break;
 		}
 	}
 
 	function render() {
 		$patterns.html('');
 		song.pattern.list().forEach(function(pattern, index) {
-			var $pattern = $('<li data-type="pattern" class="noselect" data-id="' + index + '"><div class="pattern-inner">' + pattern.name + '<button data-type="remove-btn"><i class="fa fa-remove"></i></button><button data-type="copy-btn"><i class="fa fa-files-o" aria-hidden="true"></i></button></div></li>');
+			var $pattern = $tplPattern.clone();
+			$pattern.data('id', index);
+			$pattern.find('[data-type="pattern-name"]').html(pattern.name);
+			if(index == playingPatternIndex) {
+				$pattern.addClass('playing');
+				$pattern.find('.fa-play').addClass('fa-stop');
+			}
 			if(index == song.pattern.getCurrIndex()) {
 				$pattern.addClass('selected');
 			}
