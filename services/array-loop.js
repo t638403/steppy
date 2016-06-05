@@ -9,21 +9,18 @@ Box.Application.addService('array-loop', function(application) {
 	}
 
 	function arrayLoop(values) {
-		var valuesCloned = _.cloneDeep(values);
+
+		var index = 0;
+
 		return Object.freeze({
 			next:next
 		});
 
 		function next() {
-			var v = values.shift();
-			var rv;
-			if (typeof v == 'function') {
-				rv = v();
-			} else {
-				rv = v;
+			if(index >= values.length) {
+				index = 0;
 			}
-			values.push(v);
-			return rv;
+			return values[index++];
 		}
 	}
 
