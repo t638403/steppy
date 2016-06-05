@@ -17,12 +17,13 @@ Box.Application.addService('metronome', function(application) {
 		events.EventEmitter.call(this);
 		var _this = this;
 		var notes = {
-			whole:new ExactInterval(beatInterval(bpm)),
-			half:new ExactInterval(beatInterval(bpm * 2)),
-			third:new ExactInterval(beatInterval(bpm * 3)),
+			//whole:new ExactInterval(beatInterval(bpm)),
+			//half:new ExactInterval(beatInterval(bpm * 2)),
+			//third:new ExactInterval(beatInterval(bpm * 3)),
 			quarter:new ExactInterval(beatInterval(bpm * 4)),
-			eighth:new ExactInterval(beatInterval(bpm * 8)),
-			sixteenth:new ExactInterval(beatInterval(bpm * 16))
+			//eighth:new ExactInterval(beatInterval(bpm * 8)),
+			//sixteenth:new ExactInterval(beatInterval(bpm * 16)),
+			midiclock:new ExactInterval(beatInterval(bpm * 24))
 		};
 
 		Object.keys(notes).forEach(function(note) {
@@ -44,12 +45,13 @@ Box.Application.addService('metronome', function(application) {
 			});
 		}
 		function setBpm(bpm) {
-			notes.whole.setInterval(beatInterval(bpm));
-			notes.half.setInterval(beatInterval(bpm * 2));
-			notes.third.setInterval(beatInterval(bpm * 3));
+			//notes.whole.setInterval(beatInterval(bpm));
+			//notes.half.setInterval(beatInterval(bpm * 2));
+			//notes.third.setInterval(beatInterval(bpm * 3));
 			notes.quarter.setInterval(beatInterval(bpm * 4));
-			notes.eighth.setInterval(beatInterval(bpm * 8));
-			notes.sixteenth.setInterval(beatInterval(bpm * 16));
+			//notes.eighth.setInterval(beatInterval(bpm * 8));
+			//notes.sixteenth.setInterval(beatInterval(bpm * 16));
+			notes.midiclock.setInterval(beatInterval(bpm * 24));
 		}
 
 		function beatInterval(bpm) {return 60000 / bpm;}

@@ -21,6 +21,9 @@ Box.Application.addService('song', function (application) {
 			midiOut.sendMessage(msg);
 		});
 	});
+	metronome.on('midiclock', function (nr) {
+			midiOut.sendMessage(midiMsgr.clock());
+	});
 
 	var midiMate = 2;
 	var currInstrument = 0;
