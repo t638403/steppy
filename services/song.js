@@ -13,6 +13,9 @@ Box.Application.addService('song', function (application) {
 
 	var song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding: 'utf8'}));
 
+	var isPlayingSong = false;
+	var isPlayingPattern = false;
+
 	var loop;
 	var midiOut;
 	metronome.on('quarter', function (nr) {
@@ -57,36 +60,27 @@ Box.Application.addService('song', function (application) {
 				midiOut.closePort();
 			}
 			metronome.stop();
-
-			var midiMessages = [];
-			var maxPats = 0;
-			song.instruments.forEach(function (instr) {
-
-				var instrumentType = _.find(song['instrument-types'], {name: instr.type});
-				maxPats = Math.max(maxPats, instr.patterns.length);
-
-				instr.patterns.forEach(playPattern(instr.ch, instrumentType, midiMessages, maxPats));
-			});
-
-			// You don't want to end the last pattern after the last note, in stead fill up with nothing untill pattern
-			// end is reached. e.g. total song must be devidable by 16 (pattern length)
-			var trailingEmptyness = ((maxPats * 16) - midiMessages.length);
-			for (var i = 0; i < trailingEmptyness; i++) {
-				midiMessages.push(undefined);
-			}
-
-			loop = arrayLoop.create(midiMessages);
+			loop = arrayLoop.create(calculateSongMidiMessages());
 			midiOut = new midi.output();
 			midiOut.openPort(midiMate);
 			metronome.start();
+			isPlayingSong = true;
 		},
 		stop: function () {
 			if (midiOut) {
 				midiOut.closePort();
 			}
 			metronome.stop();
+			isPlayingSong = false;
 		},
 		open: function (name, cb) {
+			if (midiOut) {
+				midiOut.closePort();
+			}
+			metronome.stop();
+			isPlayingSong = false;
+			isPlayingPattern = false;
+
 			fs.readFile(path.join(__dirname, '../songs/' + name + '.json'), {encoding: 'utf8'}, function (err, data) {
 				if (err) {
 					cb(err);
@@ -134,26 +128,23 @@ Box.Application.addService('song', function (application) {
 					return currKey;
 				},
 				down: function() {
-					if (midiOut) {
-						midiOut.closePort();
-					}
-					var midiChannel = song.instruments[currInstrument].ch
-					var msg = midiMsgr.noteOn(midiChannel, currKey, 127);
-
-					midiOut = new midi.output();
-					midiOut.openPort(midiMate);
-					midiOut.sendMessage(msg);
-				},
-				up: function() {
-					if (!midiOut) {
+					if(!isPlayingPattern && !isPlayingSong) {
 						midiOut = new midi.output();
 						midiOut.openPort(midiMate);
 					}
+
+					var midiChannel = song.instruments[currInstrument].ch
+					var msg = midiMsgr.noteOn(midiChannel, currKey, 127);
+					midiOut.sendMessage(msg);
+				},
+				up: function() {
 					var midiChannel = song.instruments[currInstrument].ch
 					var msg = midiMsgr.allNotesOff(midiChannel);
-
 					midiOut.sendMessage(msg);
-					midiOut.closePort();
+
+					if(!isPlayingPattern && !isPlayingSong) {
+						midiOut.closePort();
+					}
 				}
 			},
 			param: {
@@ -172,30 +163,18 @@ Box.Application.addService('song', function (application) {
 					midiOut.closePort();
 				}
 				metronome.stop();
-
-				var instrument = song.instruments[currInstrument];
-				var instrumentType = _.find(song['instrument-types'], {name: instrument.type});
-				var midiMessages = [];
-				var maxPats = 1;
-				playPattern(instrument.ch, instrumentType, midiMessages, maxPats)(instrument.patterns[currPattern]);
-
-				// You don't want to end the last pattern after the last note, in stead fill up with nothing untill pattern
-				// end is reached. e.g. total song must be devidable by 16 (pattern length)
-				var trailingEmptyness = ((maxPats * 16) - midiMessages.length);
-				for (var i = 0; i < trailingEmptyness; i++) {
-					midiMessages.push(undefined);
-				}
-
-				loop = arrayLoop.create(midiMessages);
+				loop = arrayLoop.create(calculatePatternMidiMessages());
 				midiOut = new midi.output();
 				midiOut.openPort(midiMate);
 				metronome.start();
+				isPlayingPattern = true;
 			},
 			stop: function () {
 				if (midiOut) {
 					midiOut.closePort();
 				}
 				metronome.stop();
+				isPlayingPattern = false;
 			},
 			list: function () {
 				return song.instruments[currInstrument].patterns;
@@ -210,6 +189,7 @@ Box.Application.addService('song', function (application) {
 					}
 					song.instruments[currInstrument].patterns[index] = patterns[oldIndex];
 				});
+				updateLoop();
 			},
 			duplicate: function (index) {
 				var len = song.instruments[currInstrument].patterns.length;
@@ -252,18 +232,21 @@ Box.Application.addService('song', function (application) {
 					song.instruments[currInstrument].patterns[currPattern].params[currParam] = [];
 				}
 				song.instruments[currInstrument].patterns[currPattern].params[currParam][i] = p;
+				updateLoop();
 			},
 			removeParam: function (i) {
 				if (!song.instruments[currInstrument].patterns[currPattern].params[currParam]) {
 					song.instruments[currInstrument].patterns[currPattern].params[currParam] = [];
 				}
 				song.instruments[currInstrument].patterns[currPattern].params[currParam][i] = undefined;
+				updateLoop();
 			},
 			getNotes: function () {
 				return song.instruments[currInstrument].patterns[currPattern].notes;
 			},
 			setNotes: function (newNotes) {
 				song.instruments[currInstrument].patterns[currPattern].notes = newNotes;
+				updateLoop();
 			},
 			deleteNotes: function () {
 				song.instruments[currInstrument].patterns[currPattern].notes = song.instruments[currInstrument].patterns[currPattern].notes.reduce(function (notes, note, id) {
@@ -272,6 +255,7 @@ Box.Application.addService('song', function (application) {
 					}
 					return notes;
 				}, []);
+				updateLoop();
 			},
 			setNoteLengths: function (l) {
 				song.instruments[currInstrument].patterns[currPattern].notes.forEach(function (n, id) {
@@ -279,6 +263,7 @@ Box.Application.addService('song', function (application) {
 						song.instruments[currInstrument].patterns[currPattern].notes[id].l = l;
 					}
 				});
+				updateLoop();
 			},
 			// Add a note to the notes array
 			createNote: function (x, y) {
@@ -289,6 +274,7 @@ Box.Application.addService('song', function (application) {
 					l: 1.0,
 					selected: true
 				});
+				updateLoop();
 			},
 			deselectAll: function () {
 				song.instruments[currInstrument].patterns[currPattern].notes.forEach(function (n, id) {
@@ -387,6 +373,52 @@ Box.Application.addService('song', function (application) {
 		}
 	}
 
+	function calculateSongMidiMessages() {
+		var midiMessages = [];
+		var maxPats = 0;
+		song.instruments.forEach(function (instr) {
 
+			var instrumentType = _.find(song['instrument-types'], {name: instr.type});
+			maxPats = Math.max(maxPats, instr.patterns.length);
+
+			instr.patterns.forEach(playPattern(instr.ch, instrumentType, midiMessages, maxPats));
+		});
+
+		// You don't want to end the last pattern after the last note, in stead fill up with nothing untill pattern
+		// end is reached. e.g. total song must be devidable by 16 (pattern length)
+		var trailingEmptyness = ((maxPats * 16) - midiMessages.length);
+		for (var i = 0; i < trailingEmptyness; i++) {
+			midiMessages.push(undefined);
+		}
+		return midiMessages;
+	}
+
+	function calculatePatternMidiMessages() {
+		var instrument = song.instruments[currInstrument];
+		var instrumentType = _.find(song['instrument-types'], {name: instrument.type});
+		var midiMessages = [];
+		var maxPats = 1;
+		playPattern(instrument.ch, instrumentType, midiMessages, maxPats)(instrument.patterns[currPattern]);
+
+		// You don't want to end the last pattern after the last note, in stead fill up with nothing untill pattern
+		// end is reached. e.g. total song must be devidable by 16 (pattern length)
+		var trailingEmptyness = ((maxPats * 16) - midiMessages.length);
+		for (var i = 0; i < trailingEmptyness; i++) {
+			midiMessages.push(undefined);
+		}
+		return midiMessages;
+	}
+
+	function updateLoop() {
+		if(isPlayingSong) {
+			metronome.stop();
+			loop.update(calculateSongMidiMessages());
+			metronome.start();
+		} else if(isPlayingPattern) {
+			metronome.stop();
+			loop.update(calculatePatternMidiMessages());
+			metronome.start();
+		}
+	}
 
 });

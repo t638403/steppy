@@ -13,7 +13,8 @@ Box.Application.addService('array-loop', function(application) {
 		var index = 0;
 
 		return Object.freeze({
-			next:next
+			next:next,
+			update:update,
 		});
 
 		function next() {
@@ -21,6 +22,13 @@ Box.Application.addService('array-loop', function(application) {
 				index = 0;
 			}
 			return values[index++];
+		}
+
+		function update(newValues) {
+			if(index >= newValues.length) {
+				index = 0;
+			}
+			values = newValues;
 		}
 	}
 
