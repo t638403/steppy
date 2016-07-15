@@ -1,0 +1,65 @@
+{
+  "name": "xl-1",
+  "params": [
+    {
+      "type": "cc",
+      "name": "A",
+      "cc": 21
+    },
+    {
+      "type": "cc",
+      "name": "B",
+      "cc": 14
+    },
+    {
+      "type": "cc",
+      "name": "C",
+      "cc": 23
+    },
+    {
+      "type": "cc",
+      "name": "D",
+      "cc": 24
+    },
+    {
+      "type": "cc",
+      "name": "E",
+      "cc": 25
+    },
+    {
+      "type": "cc",
+      "name": "F",
+      "cc": 26
+    },
+    {
+      "type": "cc",
+      "name": "G",
+      "cc": 27
+    },
+    {
+      "type": "cc",
+      "name": "H",
+      "cc": 28
+    },
+    {
+      "type": "cc",
+      "name": "I",
+      "cc": 78
+    },
+    {
+      "type": "cc",
+      "name": "J",
+      "cc": 79
+    },
+    {
+      "type": "cc",
+      "name": "K",
+      "cc": 91
+    },
+    {
+      "type": "cc",
+      "name": "L",
+      "cc": 92
+    }
+  ]
+}

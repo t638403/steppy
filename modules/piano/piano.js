@@ -4,10 +4,11 @@ Box.Application.addModule('piano', function(context) {
 		cfg,
 		$elem,
         $piano,
-		midiMsgr,
+		sMidiMsgr,
+		sSong,
+		sInstrType,
         keys,
         isPressingKey,
-		song,
 		mappedKeys;
 
     return {
@@ -23,8 +24,10 @@ Box.Application.addModule('piano', function(context) {
         $ = context.getGlobal('jQuery');
 		cfg = context.getConfig();
         var range = context.getGlobal('_').range;
-		midiMsgr = context.getService('midi-msgr');
-		song = context.getService('song');
+
+		sMidiMsgr = context.getService('midi-msgr');
+		sInstrType = context.getService('instrument-type');
+		sSong = context.getService('song');
 
 		$elem = $(context.getElement());
         $piano = $elem.find('[data-type="piano"]');
@@ -32,10 +35,10 @@ Box.Application.addModule('piano', function(context) {
         keys = range(88).map(createKey);
         isPressingKey = false;
 
-		var type = song.instrument.type.curr();
+		var type = sSong.instrument.type.curr();
 		mappedKeys = _.has(type, 'keys')?type.keys: null;
 		if(mappedKeys) {
-			song.instrument.key.setCurr(Object.keys(mappedKeys)[0]);
+			sSong.instrument.key.setCurr(Object.keys(mappedKeys)[0]);
 		}
 
 		// prevent piano from scrolling. Scrolling the piano is
@@ -52,8 +55,8 @@ Box.Application.addModule('piano', function(context) {
 		$piano = null;
 		keys = null;
 		isPressingKey = null;
-		midiMsgr = null;
-		song = null;
+		sMidiMsgr = null;
+		sSong = null;
 	}
 
     function onmousedown(event, element, elementType) {
@@ -62,8 +65,8 @@ Box.Application.addModule('piano', function(context) {
             case "key":
                 isPressingKey = true;
                 var id = parseInt($this.data('id'));
-				song.instrument.key.setCurr(midiMsgr.noteNrToStr(id2notenr(id)));
-				song.instrument.key.down();
+				sSong.instrument.key.setCurr(sMidiMsgr.noteNrToStr(id2notenr(id)));
+				sSong.instrument.key.down();
 				context.broadcast('pianokeypress', id2notenr(id));
                 keys[id].pressed = true;
                 render();
@@ -76,7 +79,7 @@ Box.Application.addModule('piano', function(context) {
         if(isPressingKey) {
             isPressingKey = false;
             keys.forEach(releaseKey);
-			song.instrument.key.up();
+			sSong.instrument.key.up();
             render();
         }
     }
@@ -106,7 +109,7 @@ Box.Application.addModule('piano', function(context) {
 	}
 
     function renderKey(k, i) {
-		var noteStr = midiMsgr.noteNrToStr(id2notenr(i));
+		var noteStr = sMidiMsgr.noteNrToStr(id2notenr(i));
         var $key = $('<div data-type="key" data-id="'+k.id+'"  ondragstart="return false;" />');
 		$key.html(noteStr);
 		$key.removeClass('curr');
@@ -114,14 +117,14 @@ Box.Application.addModule('piano', function(context) {
 		// write key alias as defined in current instrument type
 		if(mappedKeys && mappedKeys[noteStr]) {
 			$key.html(mappedKeys[noteStr]);
-			if(song.instrument.key.getCurr() == noteStr) {
+			if(sSong.instrument.key.getCurr() == noteStr) {
 				$key.addClass('curr');
 			}
 			$piano.append($key);
 		}
 		$key.css('line-height', cfg.y + 'px');
 
-		if(!mappedKeys && midiMsgr.isBlackNote(id2notenr(i))) {
+		if(!mappedKeys && sMidiMsgr.isBlackNote(id2notenr(i))) {
 			$key.addClass('black');
 		}
 		if(!mappedKeys && noteStr == 'C4') {
@@ -141,10 +144,10 @@ Box.Application.addModule('piano', function(context) {
 			$elem.scrollTop(data.top);
 		}
 		if(name == 'instrumentchange') {
-			var type = song.instrument.type.curr();
+			var type = sSong.instrument.type.curr();
 			mappedKeys = _.has(type, 'keys')?type.keys: null;
 			if(mappedKeys) {
-				song.instrument.key.setCurr(Object.keys(mappedKeys)[0]);
+				sSong.instrument.key.setCurr(Object.keys(mappedKeys)[0]);
 			}
 			render();
 		}

@@ -2,11 +2,11 @@ Box.Application.addModule('song', function(context) {
 	var $,
 		$elem,
 		cfg,
-		song,
+		sSong,
 		params;
 
 	return {
-		messages:['pianokeypress'],
+		messages:['pianokeypress', 'paramedited'],
 		init:init,
 		destroy:destroy,
 		onchange:onchange,
@@ -19,9 +19,9 @@ Box.Application.addModule('song', function(context) {
 		$ = context.getGlobal('jQuery');
 		$elem = $(context.getElement());
 		cfg = context.getConfig();
-		song = context.getService('song');
+		sSong = context.getService('song');
 
-		$elem.find('[data-type="song-name"]').val(song.name());
+		$elem.find('[data-type="song-name"]').val(sSong.name());
 
 		render();
 	}
@@ -31,14 +31,14 @@ Box.Application.addModule('song', function(context) {
 		$elem = null;
 		cfg = null;
 
-		song = null;
+		sSong = null;
 	}
 
 	function onclick(event, elem, elemType) {
 		var $this = $(elem);
 		switch(elemType) {
 			case 'song-new':
-				song.new();
+				sSong.new();
 				render();
 				context.broadcast('instrumentchange');
 				context.broadcast('patternchange');
@@ -46,7 +46,7 @@ Box.Application.addModule('song', function(context) {
 				context.broadcast('info', 'Loaded empty song');
 				break;
 			case 'song-save':
-				song.save(function(err) {
+				sSong.save(function(err) {
 					if(err) {
 						context.broadcast('error', err.toString());
 					} else {
@@ -56,7 +56,7 @@ Box.Application.addModule('song', function(context) {
 				break;
 			case 'song-open':
 				var name = $elem.find('[data-type="song-name"]').val();
-				song.open(name, function(err) {
+				sSong.open(name, function(err) {
 					if(err) {
 						context.broadcast('error', err.toString());
 					} else {
@@ -69,11 +69,11 @@ Box.Application.addModule('song', function(context) {
 				});
 				break;
 			case 'song-play':
-				song.play();
+				sSong.play();
 				context.broadcast('ok', '<i class="fa fa-music" aria-hidden="true"></i> Now playing <i class="fa fa-music" aria-hidden="true"></i>')
 				break;
 			case 'song-stop':
-				song.stop();
+				sSong.stop();
 				context.broadcast('ok', 'Music stopped')
 				break;
 		}
@@ -84,63 +84,73 @@ Box.Application.addModule('song', function(context) {
 		switch(elemType) {
 			case 'instruments':
 				var selectedInstrumentIndex = parseInt($(elem).find('option:selected').val());
-				song.pattern.setCurrIndex(0);
-				song.instrument.setSelectedInstrumentIndex(selectedInstrumentIndex);
+				sSong.pattern.setCurrIndex(0);
+				sSong.instrument.setSelectedInstrumentIndex(selectedInstrumentIndex);
 				context.broadcast('instrumentchange');
 				render();
 				break;
 			case 'params':
-				song.instrument.param.setCurr(parseInt($this.val()));
+				sSong.instrument.param.setCurr(parseInt($this.val()));
 				context.broadcast('paramchange');
 				break;
 			case 'song-name':
-				song.name($this.val());
+				sSong.name($this.val());
 				render();
-				context.broadcast('info', 'Song name changed to ' + song.name())
+				context.broadcast('info', 'Song name changed to ' + sSong.name())
 				break;
 			case 'song-bpm':
-				song.bpm($this.val());
+				sSong.bpm($this.val());
 				render();
-				context.broadcast('info', 'Bpm name changed to ' + song.bpm())
+				context.broadcast('info', 'Bpm name changed to ' + sSong.bpm())
 				break;
 		}
 	}
 
 	function render() {
 
-		$elem.find('input[data-type="song-name"]').val(song.name());
-		$elem.find('input[data-type="song-bpm"]').val(song.bpm());
+		$elem.find('input[data-type="song-name"]').val(sSong.name());
+		$elem.find('input[data-type="song-bpm"]').val(sSong.bpm());
 
 		$instruments = $elem.find('select[data-type="instruments"]');
 		$instruments.html('');
-		var instruments = song.instrument.list();
+		var instruments = sSong.instrument.list();
 		instruments.forEach(function(instrument, i) {
 			var $option = $('<option value="'+i+'">' + instrument.name + '</option>');
 			$instruments.append($option);
 		});
-		$instruments.val(song.instrument.getSelectedInstrumentIndex());
+		$instruments.val(sSong.instrument.getSelectedInstrumentIndex());
 
 		$params = $elem.find('select[data-type="params"]');
 		$params.html('');
 
-		var type = song.instrument.type.curr();
+		var type = sSong.instrument.type.curr();
 		var mappedKeys = _.has(type, 'keys')?type.keys: null;
+		var currPat = sSong.pattern.getCurr();
+		var currParam = sSong.instrument.param.getCurr();
 		type.params.forEach(function(param, i) {
 
 			// If param has no key linked to it
 			// If param is global
 			// If param has currently selected key linked to it
-			if(!_.has(param, 'key') || param.key == '*' || (mappedKeys && param.key == mappedKeys[song.instrument.key.getCurr()])) {
+			if(!_.has(param, 'key') || param.key == '*' || (mappedKeys && param.key == mappedKeys[sSong.instrument.key.getCurr()])) {
 				var $option = $('<option value="'+i+'">' + param.name + '</option>');
+
+				var paramIsUsed = (_.isArray(currPat.params[i]) && currPat.params[i].length > 0)
+				if(paramIsUsed) {
+					$option.css('font-weight','bold');
+				}
 				$params.append($option);
 			}
 		});
-		$params.val($params.find('option:first').val());
+		$params.val(currParam);
 	}
 
 	function onmessage(name, data) {
 		if(name == 'pianokeypress') {
-			song.instrument.param.setCurr(0);
+			sSong.instrument.param.setCurr(0);
+			render();
+		}
+		if(name == 'paramedited') {
 			render();
 		}
 	}

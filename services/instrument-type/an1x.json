@@ -1,0 +1,330 @@
+{
+  "name": "an1x",
+  "params": [
+    {
+      "type": "cc",
+      "name": "Scene select",
+      "cc": 3
+    },
+    {
+      "type": "cc",
+      "name": "Layer Mode",
+      "cc": 8
+    },
+    {
+      "type": "cc",
+      "name": "Poly/Mono Mode",
+      "cc": 9
+    },
+    {
+      "type": "cc",
+      "name": "LFO Reset Mode",
+      "cc": 14
+    },
+    {
+      "type": "cc",
+      "name": "LFO 1 Wave",
+      "cc": 15
+    },
+    {
+      "type": "cc",
+      "name": "LFO1 Speed",
+      "cc": 16
+    },
+    {
+      "type": "cc",
+      "name": "LFO2 Speed",
+      "cc": 17
+    },
+    {
+      "type": "cc",
+      "name": "VCO1 Pitch Mod Dept",
+      "cc": 18
+    },
+    {
+      "type": "cc",
+      "name": "VCF Filter Mod Depth",
+      "cc": 19
+    },
+    {
+      "type": "cc",
+      "name": "LFO1 Delay",
+      "cc": 20
+    },
+    {
+      "type": "cc",
+      "name": "VCO1 Pitch Coarse Tune",
+      "cc": 21
+    },
+    {
+      "type": "cc",
+      "name": "VCO Sync Pitch",
+      "cc": 22
+    },
+    {
+      "type": "cc",
+      "name": "VCO Sync Pitch Depth",
+      "cc": 23
+    },
+    {
+      "type": "cc",
+      "name": "VCO Sync Pitch Source",
+      "cc": 24
+    },
+    {
+      "type": "cc",
+      "name": "PEG Depth",
+      "cc": 25
+    },
+    {
+      "type": "cc",
+      "name": "PEG Switch",
+      "cc": 26
+    },
+    {
+      "type": "cc",
+      "name": "PEG Decay",
+      "cc": 27
+    },
+    {
+      "type": "cc",
+      "name": "PEG Sustain Level",
+      "cc": 28
+    },
+    {
+      "type": "cc",
+      "name": "PEG Release",
+      "cc": 29
+    },
+    {
+      "type": "cc",
+      "name": "VCF Cutoff Kbd Track",
+      "cc": 30
+    },
+    {
+      "type": "cc",
+      "name": "Amp EG Sustain Level",
+      "cc": 31
+    },
+    {
+      "type": "cc",
+      "name": "VCO Algorithm",
+      "cc": 33
+    },
+    {
+      "type": "cc",
+      "name": "VCO Sync Pitch Mod SW",
+      "cc": 34
+    },
+    {
+      "type": "cc",
+      "name": "FM Depth",
+      "cc": 35
+    },
+    {
+      "type": "cc",
+      "name": "FM Source 1",
+      "cc": 36
+    },
+    {
+      "type": "cc",
+      "name": "FM Source 2",
+      "cc": 37
+    },
+    {
+      "type": "cc",
+      "name": "Mixer Noise Level",
+      "cc": 39
+    },
+    {
+      "type": "cc",
+      "name": "VCO1 Wave Type",
+      "cc": 50
+    },
+    {
+      "type": "cc",
+      "name": "VCO2 Wave Type",
+      "cc": 51
+    },
+    {
+      "type": "cc",
+      "name": "VCO2 Pitch Coarse Tune",
+      "cc": 52
+    },
+    {
+      "type": "cc",
+      "name": "VCO2 Pitch Fine Tune",
+      "cc": 53
+    },
+    {
+      "type": "cc",
+      "name": "VCO2 Edge",
+      "cc": 54
+    },
+    {
+      "type": "cc",
+      "name": "VCO2 Pulse Width",
+      "cc": 55
+    },
+    {
+      "type": "cc",
+      "name": "VCO2 PWM Depth",
+      "cc": 56
+    },
+    {
+      "type": "cc",
+      "name": "VCO2 Pitch Mod Depth",
+      "cc": 57
+    },
+    {
+      "type": "cc",
+      "name": "VCF HPF Cutoff",
+      "cc": 58
+    },
+    {
+      "type": "cc",
+      "name": "VCF Filter Type",
+      "cc": 59
+    },
+    {
+      "type": "cc",
+      "name": "Filter EG Velocity Sens",
+      "cc": 60
+    },
+    {
+      "type": "cc",
+      "name": "Apm EG Velocity Sens",
+      "cc": 61
+    },
+    {
+      "type": "cc",
+      "name": "VCA Volumne",
+      "cc": 62
+    },
+    {
+      "type": "cc",
+      "name": "VCA Feedback Levle",
+      "cc": 63
+    },
+    {
+      "type": "cc",
+      "name": "VCO1 Mixer Level",
+      "cc": 68
+    },
+    {
+      "type": "cc",
+      "name": "VCO2 Mixer Level",
+      "cc": 69
+    },
+    {
+      "type": "cc",
+      "name": "Ring Mod Level",
+      "cc": 70
+    },
+    {
+      "type": "cc",
+      "name": "VCO1 Edge",
+      "cc": 76
+    },
+    {
+      "type": "cc",
+      "name": "VCO1 Pitch Fine Tune",
+      "cc": 77
+    },
+    {
+      "type": "cc",
+      "name": "VCO1 Pulse Width",
+      "cc": 78
+    },
+    {
+      "type": "cc",
+      "name": "VCO1 PWM Depth",
+      "cc": 79
+    },
+    {
+      "type": "cc",
+      "name": "VCA Amp Mod Depth",
+      "cc": 80
+    },
+    {
+      "type": "cc",
+      "name": "Filter EG Depth",
+      "cc": 81
+    },
+    {
+      "type": "cc",
+      "name": "Filter EG Attack",
+      "cc": 82
+    },
+    {
+      "type": "cc",
+      "name": "Filter EG Decay",
+      "cc": 83
+    },
+    {
+      "type": "cc",
+      "name": "Portamento Mode",
+      "cc": 85
+    },
+    {
+      "type": "cc",
+      "name": "VCO1 PWM Source",
+      "cc": 86
+    },
+    {
+      "type": "cc",
+      "name": "VCO2 PWM Source",
+      "cc": 87
+    },
+    {
+      "type": "cc",
+      "name": "ARP/Step Seq SW",
+      "cc": 90
+    },
+    {
+      "type": "cc",
+      "name": "Modulation",
+      "cc": 1
+    },
+    {
+      "type": "cc",
+      "name": "VCF Resonance",
+      "cc": 71
+    },
+    {
+      "type": "cc",
+      "name": "VCA Release",
+      "cc": 72
+    },
+    {
+      "type": "cc",
+      "name": "VCA Attack",
+      "cc": 73
+    },
+    {
+      "type": "cc",
+      "name": "VCF Cutoff",
+      "cc": 74
+    },
+    {
+      "type": "cc",
+      "name": "VCA Decay",
+      "cc": 75
+    },
+    {
+      "type": "cc",
+      "name": "Reverb Depth",
+      "cc": 91
+    },
+    {
+      "type": "cc",
+      "name": "Chorus Depth",
+      "cc": 93
+    },
+    {
+      "type": "cc",
+      "name": "Delay Depth",
+      "cc": 94
+    }
+  ]
+}

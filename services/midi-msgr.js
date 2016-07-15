@@ -8,7 +8,7 @@ Box.Application.addService('midi-msgr', function(application) {
 	return {
 		noteOn:noteOn,
 		noteOff:noteOff,
-		ctrlChange:ctrChange,
+		ctrlChange:ctrlChange,
 		nrpn:nrpn,
 		programChange:programChange,
 		bankSelectMsb:bankSelectMsb,
@@ -34,18 +34,7 @@ Box.Application.addService('midi-msgr', function(application) {
 		return [note_off, note_number, velocity];
 	}
 
-	function getNoteNumber(nameAndOctave) {
-		var names = {'C':12,'C#':13,'D':14,'D#':15,'E':16,'F':17,'F#':18,'G':19,'G#':20,'A':21,'A#':22,'B':23};
-		var parts = nameAndOctave.toUpperCase().match(/^([CDEFGAB](|#))((|-)\d)$/);
-		var name = parts[1];
-		if(!(name in names)) {throw new Error(util.format('Invalid note name \'%s\'', nameAndOctave));}
-		var octave = parseInt(parts[3]);
-		var noteNr = names[name] + (octave * 12);
-		if(noteNr<0 || noteNr > 127) {throw new Error('Note nr out of bounds, must be 0-127')}
-		return noteNr
-	}
-
-	function ctrChange(channelNr, ctrl, value) {
+	function ctrlChange(channelNr, ctrl, value) {
 		if(!_.isNumber(ctrl) || ctrl < 0 || ctrl > 127) {throw new Error('Ctrl index out of bounds, must be 0-127')}
 		if(!_.isNumber(value) || value < 0 || value > 127) {throw new Error('Ctrl value must be 0-127')}
 		var Bn = parseInt('0xB0', 16) + (channelNr - 1);
@@ -79,11 +68,13 @@ Box.Application.addService('midi-msgr', function(application) {
 	}
 
 	function programChange(channelNr, v) {
+		v = _.isString(v)?parseInt(v, 16):v;
 		var Cn = parseInt('0xC0', 16) + (channelNr - 1);
 		return [Cn, v];
 	}
 
 	function afterTouch(channelNr, v) {
+		v = _.isString(v)?parseInt(v, 16):v;
 		var Dn = parseInt('0xD0', 16) + (channelNr - 1);
 		return [Dn, v];
 	}
@@ -99,19 +90,32 @@ Box.Application.addService('midi-msgr', function(application) {
 	}
 
 	function bankSelectMsb(v) {
-		return ctrChange(parseInt('0x00', 16), v);
+		v = _.isString(v)?parseInt(v, 16):v;
+		return ctrlChange(parseInt('0x00', 16), v);
 	}
 
 	function bankSelectLsb(v) {
-		return ctrChange(parseInt('0x20', 16), v);
+		v = _.isString(v)?parseInt(v, 16):v;
+		return ctrlChange(parseInt('0x20', 16), v);
 	}
 
+	/**
+	 * Midi clock message. Send 24 times every beat.
+	 *
+	 * @returns {number[]}
+	 */
 	function clock() {
 		return [248];
 	}
 
 	/* HELPER FUNCTIONS */
 
+	/**
+	 * Convert a midi note nr to a human readable string. For example 34 -> A#2
+	 *
+	 * @param nr {int} The note number
+	 * @returns {string} The human readable string
+	 */
 	function noteNrToStr(nr) {
 
 		if(typeof nr !== 'number') throw new Error('input must be a number');
@@ -122,6 +126,12 @@ Box.Application.addService('midi-msgr', function(application) {
 		return keys[key] + (octave - 1);
 	}
 
+	/**
+	 * Convert a human readable note string to a midi note number. For example A#2 -> 34
+	 *
+	 * @param str {string} The human readable string
+	 * @returns {number} The midi note number
+	 */
 	function noteStrToNr(str) {
 
 		if(typeof str !== 'string') throw new Error('input must be a string');
@@ -137,12 +147,32 @@ Box.Application.addService('midi-msgr', function(application) {
 
 	}
 
+	/**
+	 * Convert a human readable note string to a midi note number. For example A#2 -> 34
+	 *
+	 * @param nameAndOctave {string} The human readable string
+	 * @returns {*} The midi note number
+	 */
+	function getNoteNumber(nameAndOctave) {
+		var names = {'C':12,'C#':13,'D':14,'D#':15,'E':16,'F':17,'F#':18,'G':19,'G#':20,'A':21,'A#':22,'B':23};
+		var parts = nameAndOctave.toUpperCase().match(/^([CDEFGAB](|#))((|-)\d)$/);
+		var name = parts[1];
+		if(!(name in names)) {throw new Error(util.format('Invalid note name \'%s\'', nameAndOctave));}
+		var octave = parseInt(parts[3]);
+		var noteNr = names[name] + (octave * 12);
+		if(noteNr<0 || noteNr > 127) {throw new Error('Note nr out of bounds, must be 0-127')}
+		return noteNr
+	}
+
+	/**
+	 * Check if a string/note nr is a black note.
+	 *
+	 * @param nr {string|nr} The note string/number for example either A#2 or 34
+	 * @returns {boolean} True if is a black note, false if not
+	 */
 	function isBlackNote(nr) {
-
-		if(typeof nr !== 'number') throw new Error('input must be a number');
-		if( !(nr > 20 && nr < 109) ) throw new Error('input should be 20 < nr < 109');
-
-		return /#/.test(noteNrToStr(nr))
+		nr = _.isString(nr)?nr:noteNrToStr(nr);
+		return /#/.test(nr)
 	}
 
 });

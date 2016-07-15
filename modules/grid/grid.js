@@ -308,6 +308,7 @@ Box.Application.addModule('grid', function(context) {
         }
 
 		// Resize grid to pattern dims
+
 		$grid.css({
 			'width':(cfg.x * song.pattern.length()) + 'px',
 			'height':(cfg.y * 87) + 'px',

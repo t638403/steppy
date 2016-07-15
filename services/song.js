@@ -7,9 +7,11 @@ Box.Application.addService('song', function (application) {
 	var fs = application.getGlobal('fs');
 	var midi = application.getGlobal('midi');
 
-	var metronome = application.getService('metronome').create(120);
-	var arrayLoop = application.getService('array-loop');
-	var midiMsgr = application.getService('midi-msgr');
+	var sMetronome = application.getService('metronome').create(120);
+	var sArrayLoop = application.getService('array-loop');
+	var sMidiMsgr = application.getService('midi-msgr');
+	var sInstr = application.getService('instrument');
+	var sInstrType = application.getService('instrument-type');
 
 	var song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding: 'utf8'}));
 
@@ -18,14 +20,14 @@ Box.Application.addService('song', function (application) {
 
 	var loop;
 	var midiOut;
-	metronome.on('quarter', function (nr) {
+	sMetronome.on('quarter', function (nr) {
 		var msgs = loop.next() || [];
 		msgs.forEach(function (msg) {
 			midiOut.sendMessage(msg);
 		});
 	});
-	metronome.on('midiclock', function (nr) {
-			midiOut.sendMessage(midiMsgr.clock());
+	sMetronome.on('midiclock', function (nr) {
+		midiOut.sendMessage(sMidiMsgr.clock());
 	});
 
 	var midiMate = 2;
@@ -38,6 +40,7 @@ Box.Application.addService('song', function (application) {
 	return {
 		new: function () {
 			song = JSON.parse(fs.readFileSync(path.join(__dirname, 'song.json'), {encoding: 'utf8'}));
+
 		},
 		name: function (name) {
 			if (name) {
@@ -48,7 +51,7 @@ Box.Application.addService('song', function (application) {
 		bpm: function (bpm) {
 			if (bpm) {
 				song.bpm = Math.abs(bpm);
-				metronome.setBpm(song.bpm);
+				sMetronome.setBpm(song.bpm);
 			}
 			return song.bpm;
 		},
@@ -59,25 +62,29 @@ Box.Application.addService('song', function (application) {
 			if (midiOut) {
 				midiOut.closePort();
 			}
-			metronome.stop();
-			loop = arrayLoop.create(calculateSongMidiMessages());
+			sMetronome.stop();
+			loop = sArrayLoop.create(calculateSongMidiMessages());
 			midiOut = new midi.output();
 			midiOut.openPort(midiMate);
-			metronome.start();
+			sMetronome.start();
 			isPlayingSong = true;
 		},
 		stop: function () {
 			if (midiOut) {
+				// Send note off to each midi channel
+				_.range(16).forEach(function(ch) {
+					midiOut.sendMessage(sMidiMsgr.allNotesOff(ch))
+				});
 				midiOut.closePort();
 			}
-			metronome.stop();
+			sMetronome.stop();
 			isPlayingSong = false;
 		},
 		open: function (name, cb) {
 			if (midiOut) {
 				midiOut.closePort();
 			}
-			metronome.stop();
+			sMetronome.stop();
 			isPlayingSong = false;
 			isPlayingPattern = false;
 
@@ -114,10 +121,10 @@ Box.Application.addService('song', function (application) {
 			},
 			type: {
 				getByName: function (name) {
-					return _.find(song['instrument-types'], {name: name})
+					return sInstrType.getByName(name);
 				},
 				curr: function () {
-					return _.find(song['instrument-types'], {name: song.instruments[currInstrument].type})
+					return sInstrType.getByName(song.instruments[currInstrument].type);
 				}
 			},
 			key: {
@@ -134,12 +141,12 @@ Box.Application.addService('song', function (application) {
 					}
 
 					var midiChannel = song.instruments[currInstrument].ch
-					var msg = midiMsgr.noteOn(midiChannel, currKey, 127);
+					var msg = sMidiMsgr.noteOn(midiChannel, currKey, 127);
 					midiOut.sendMessage(msg);
 				},
 				up: function() {
 					var midiChannel = song.instruments[currInstrument].ch
-					var msg = midiMsgr.allNotesOff(midiChannel);
+					var msg = sMidiMsgr.allNotesOff(midiChannel);
 					midiOut.sendMessage(msg);
 
 					if(!isPlayingPattern && !isPlayingSong) {
@@ -162,18 +169,21 @@ Box.Application.addService('song', function (application) {
 				if (midiOut) {
 					midiOut.closePort();
 				}
-				metronome.stop();
-				loop = arrayLoop.create(calculatePatternMidiMessages());
+				sMetronome.stop();
+				loop = sArrayLoop.create(calculatePatternMidiMessages());
 				midiOut = new midi.output();
 				midiOut.openPort(midiMate);
-				metronome.start();
+				sMetronome.start();
 				isPlayingPattern = true;
 			},
 			stop: function () {
 				if (midiOut) {
+					_.range(16).forEach(function(ch) {
+						midiOut.sendMessage(sMidiMsgr.allNotesOff(ch))
+					});
 					midiOut.closePort();
 				}
-				metronome.stop();
+				sMetronome.stop();
 				isPlayingPattern = false;
 			},
 			list: function () {
@@ -239,6 +249,22 @@ Box.Application.addService('song', function (application) {
 					song.instruments[currInstrument].patterns[currPattern].params[currParam] = [];
 				}
 				song.instruments[currInstrument].patterns[currPattern].params[currParam][i] = undefined;
+
+				// Set params array to null if all values are null.
+				// This happens when params are removed.
+				// This way the params array keeps clean
+				var allAreNull = true;
+				var len = song.instruments[currInstrument].patterns[currPattern].params[currParam].length;
+				for(var j=0; j<len; j++) {
+					if(_.isObject(song.instruments[currInstrument].patterns[currPattern].params[currParam][j])) {
+						allAreNull = false;
+						break;
+					}
+				}
+				if(allAreNull) {
+					song.instruments[currInstrument].patterns[currPattern].params[currParam] = null;
+				}
+
 				updateLoop();
 			},
 			getNotes: function () {
@@ -335,7 +361,7 @@ Box.Application.addService('song', function (application) {
 				} else {
 					noteNameNr = y2noteNr(note.y)
 				}
-				midiMessages[noteX].unshift(midiMsgr.noteOn(midiChannel, noteNameNr, Math.round(note.v * 127)));
+				midiMessages[noteX].unshift(sMidiMsgr.noteOn(midiChannel, noteNameNr, Math.round(note.v * 127)));
 
 				var offIndex = (noteX + note.l);
 
@@ -345,7 +371,7 @@ Box.Application.addService('song', function (application) {
 
 				}
 				midiMessages[offIndex] = midiMessages[offIndex] || [];
-				midiMessages[offIndex].unshift(midiMsgr.noteOff(midiChannel, noteNameNr, Math.round(note.v * 127)));
+				midiMessages[offIndex].unshift(sMidiMsgr.noteOff(midiChannel, noteNameNr, Math.round(note.v * 127)));
 			});
 
 			pat.params.forEach(function (paramValues, index) {
@@ -358,11 +384,12 @@ Box.Application.addService('song', function (application) {
 					var paramX = ((patIndex * 16) + paramValue.x);
 					midiMessages[paramX] = midiMessages[paramX] || [];
 					if (isCC) {
-						midiMessages[paramX] = midiMsgr.ctrlChange(midiChannel, paramType.cc, Math.round(paramValue.v * 127));
+						var msg = sMidiMsgr.ctrlChange(midiChannel, paramType.cc, Math.round(paramValue.v * 127));
+						midiMessages[paramX].unshift(msg);
 					}
 					if (isNrpn) {
 						var dm = Math.round(paramValue.v * 127);
-						var msgs = midiMsgr.nrpn(midiChannel, paramType.nm, paramType.nl, dm, paramType.dl);
+						var msgs = sMidiMsgr.nrpn(midiChannel, paramType.nm, paramType.nl, dm, paramType.dl);
 						msgs.reverse();
 						msgs.forEach(function (msg) {
 							midiMessages[paramX].unshift(msg);
@@ -378,7 +405,7 @@ Box.Application.addService('song', function (application) {
 		var maxPats = 0;
 		song.instruments.forEach(function (instr) {
 
-			var instrumentType = _.find(song['instrument-types'], {name: instr.type});
+			var instrumentType = sInstrType.getByName(instr.type);
 			maxPats = Math.max(maxPats, instr.patterns.length);
 
 			instr.patterns.forEach(playPattern(instr.ch, instrumentType, midiMessages, maxPats));
@@ -395,7 +422,7 @@ Box.Application.addService('song', function (application) {
 
 	function calculatePatternMidiMessages() {
 		var instrument = song.instruments[currInstrument];
-		var instrumentType = _.find(song['instrument-types'], {name: instrument.type});
+		var instrumentType = sInstrType.getByName(instrument.type);
 		var midiMessages = [];
 		var maxPats = 1;
 		playPattern(instrument.ch, instrumentType, midiMessages, maxPats)(instrument.patterns[currPattern]);
@@ -411,13 +438,13 @@ Box.Application.addService('song', function (application) {
 
 	function updateLoop() {
 		if(isPlayingSong) {
-			metronome.stop();
+			sMetronome.stop();
 			loop.update(calculateSongMidiMessages());
-			metronome.start();
+			sMetronome.start();
 		} else if(isPlayingPattern) {
-			metronome.stop();
+			sMetronome.stop();
 			loop.update(calculatePatternMidiMessages());
-			metronome.start();
+			sMetronome.start();
 		}
 	}
 

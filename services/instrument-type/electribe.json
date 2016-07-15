@@ -1,0 +1,618 @@
+{
+	"name": "electribe",
+	"keys": {
+	"C2": "S1",
+		"D2": "S2",
+		"E2": "S3",
+		"F2": "S4",
+		"G2": "A1",
+		"A2": "A2",
+		"B2": "HH CLOSE",
+		"C3": "HH OPEN",
+		"D3": "CRASH",
+		"E3": "CLAP"
+},
+	"params": [
+	{
+		"type": "nrpn",
+		"name": "Low Boost",
+		"key": "S1",
+		"nm": "0x02",
+		"nl": "0x00",
+		"dl": "0x01"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pan",
+		"key": "S1",
+		"nm": "0x02",
+		"nl": "0x01",
+		"dl": "0x02"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pitch",
+		"key": "S1",
+		"nm": "0x02",
+		"nl": "0x02",
+		"dl": "0x04"
+	},
+	{
+		"type": "nrpn",
+		"name": "Wave",
+		"key": "S1",
+		"nm": "0x02",
+		"nl": "0x03",
+		"dl": "0x05"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Type",
+		"key": "S1",
+		"nm": "0x02",
+		"nl": "0x04",
+		"dm": {
+			"Sin": 0,
+			"Tri": 64
+		},
+		"dl": "0x06"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Speed",
+		"key": "S1",
+		"nm": "0x02",
+		"nl": "0x05",
+		"dl": "0x07"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Depth",
+		"key": "S1",
+		"nm": "0x02",
+		"nl": "0x06",
+		"dl": "0x08"
+	},
+	{
+		"type": "nrpn",
+		"name": "Level",
+		"key": "S1",
+		"nm": "0x02",
+		"nl": "0x07",
+		"dl": "0x00"
+	},
+	{
+		"type": "nrpn",
+		"name": "Decay",
+		"key": "S1",
+		"nm": "0x02",
+		"nl": "0x08",
+		"dl": "0x03"
+	},
+	{
+		"type": "nrpn",
+		"name": "Low Boost",
+		"key": "S2",
+		"nm": "0x02",
+		"nl": "0x0A",
+		"dl": "0x0B"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pan",
+		"key": "S2",
+		"nm": "0x02",
+		"nl": "0x0B",
+		"dl": "0x0C"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pitch",
+		"key": "S2",
+		"nm": "0x02",
+		"nl": "0x0C",
+		"dl": "0x0E"
+	},
+	{
+		"type": "nrpn",
+		"name": "Wave",
+		"key": "S2",
+		"nm": "0x02",
+		"nl": "0x0D",
+		"dl": "0x0F"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Type",
+		"key": "S2",
+		"nm": "0x02",
+		"nl": "0x0E",
+		"dl": "0x10"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Speed",
+		"key": "S2",
+		"nm": "0x02",
+		"nl": "0x0F",
+		"dl": "0x11"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Depth",
+		"key": "S2",
+		"nm": "0x02",
+		"nl": "0x10",
+		"dl": "0x12"
+	},
+	{
+		"type": "nrpn",
+		"name": "Level",
+		"key": "S2",
+		"nm": "0x02",
+		"nl": "0x11",
+		"dl": "0x0A"
+	},
+	{
+		"type": "nrpn",
+		"name": "Decay",
+		"key": "S2",
+		"nm": "0x02",
+		"nl": "0x12",
+		"dl": "0x0D"
+	},
+	{
+		"type": "nrpn",
+		"name": "Low Boost",
+		"key": "S3",
+		"nm": "0x02",
+		"nl": "0x14",
+		"dl": "0x15"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pan",
+		"key": "S3",
+		"nm": "0x02",
+		"nl": "0x15",
+		"dl": "0x16"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pitch",
+		"key": "S3",
+		"nm": "0x02",
+		"nl": "0x16",
+		"dl": "0x18"
+	},
+	{
+		"type": "nrpn",
+		"name": "Wave",
+		"key": "S3",
+		"nm": "0x02",
+		"nl": "0x17",
+		"dl": "0x19"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Type",
+		"key": "S3",
+		"nm": "0x02",
+		"nl": "0x18",
+		"dl": "0x1A"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Speed",
+		"key": "S3",
+		"nm": "0x02",
+		"nl": "0x19",
+		"dl": "0x1B"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Depth",
+		"key": "S3",
+		"nm": "0x02",
+		"nl": "0x1A",
+		"dl": "0x1C"
+	},
+	{
+		"type": "nrpn",
+		"name": "Level",
+		"key": "S3",
+		"nm": "0x02",
+		"nl": "0x1B",
+		"dl": "0x14"
+	},
+	{
+		"type": "nrpn",
+		"name": "Decay",
+		"key": "S3",
+		"nm": "0x02",
+		"nl": "0x1C",
+		"dl": "0x17"
+	},
+	{
+		"type": "nrpn",
+		"name": "Low Boost",
+		"key": "S4",
+		"nm": "0x02",
+		"nl": "0x1E",
+		"dl": "0x1F"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pan",
+		"key": "S4",
+		"nm": "0x02",
+		"nl": "0x1F",
+		"dl": "0x20"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pitch",
+		"key": "S4",
+		"nm": "0x02",
+		"nl": "0x20",
+		"dl": "0x22"
+	},
+	{
+		"type": "nrpn",
+		"name": "Wave",
+		"key": "S4",
+		"nm": "0x02",
+		"nl": "0x21",
+		"dl": "0x23"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Type",
+		"key": "S4",
+		"nm": "0x02",
+		"nl": "0x22",
+		"dl": "0x24"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Speed",
+		"key": "S4",
+		"nm": "0x02",
+		"nl": "0x23",
+		"dl": "0x25"
+	},
+	{
+		"type": "nrpn",
+		"name": "Mod Depth",
+		"key": "S4",
+		"nm": "0x02",
+		"nl": "0x24",
+		"dl": "0x26"
+	},
+	{
+		"type": "nrpn",
+		"name": "Level",
+		"key": "S4",
+		"nm": "0x02",
+		"nl": "0x25",
+		"dl": "0x1E"
+	},
+	{
+		"type": "nrpn",
+		"name": "Decay",
+		"key": "S4",
+		"nm": "0x02",
+		"nl": "0x26",
+		"dl": "0x21"
+	},
+	{
+		"type": "nrpn",
+		"name": "Low Boost",
+		"key": "HH CLOSE",
+		"nm": "0x02",
+		"nl": "0x28",
+		"dl": "0x29"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pan",
+		"key": "HH CLOSE",
+		"nm": "0x02",
+		"nl": "0x29",
+		"dl": "0x2A"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pitch",
+		"key": "HH CLOSE",
+		"nm": "0x02",
+		"nl": "0x2A",
+		"dl": "0x2C"
+	},
+	{
+		"type": "nrpn",
+		"name": "Level",
+		"key": "HH CLOSE",
+		"nm": "0x02",
+		"nl": "0x2F",
+		"dl": "0x28"
+	},
+	{
+		"type": "nrpn",
+		"name": "Decay",
+		"key": "HH CLOSE",
+		"nm": "0x02",
+		"nl": "0x30",
+		"dl": "0x2B"
+	},
+	{
+		"type": "nrpn",
+		"name": "Low Boost",
+		"key": "HH OPEN",
+		"nm": "0x02",
+		"nl": "0x32",
+		"dl": "0x33"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pan",
+		"key": "HH OPEN",
+		"nm": "0x02",
+		"nl": "0x33",
+		"dl": "0x34"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pitch",
+		"key": "HH OPEN",
+		"nm": "0x02",
+		"nl": "0x34",
+		"dl": "0x36"
+	},
+	{
+		"type": "nrpn",
+		"name": "Level",
+		"key": "HH OPEN",
+		"nm": "0x02",
+		"nl": "0x39",
+		"dl": "0x32"
+	},
+	{
+		"type": "nrpn",
+		"name": "Decay",
+		"key": "HH OPEN",
+		"nm": "0x02",
+		"nl": "0x3A",
+		"dl": "0x35"
+	},
+	{
+		"type": "nrpn",
+		"name": "Low Boost",
+		"key": "CRASH",
+		"nm": "0x02",
+		"nl": "0x3C",
+		"dl": "0x3D"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pan",
+		"key": "CRASH",
+		"nm": "0x02",
+		"nl": "0x3D",
+		"dl": "0x3E"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pitch",
+		"key": "CRASH",
+		"nm": "0x02",
+		"nl": "0x3E",
+		"dl": "0x40"
+	},
+	{
+		"type": "nrpn",
+		"name": "Level",
+		"key": "CRASH",
+		"nm": "0x02",
+		"nl": "0x43",
+		"dl": "0x3C"
+	},
+	{
+		"type": "nrpn",
+		"name": "Decay",
+		"key": "CRASH",
+		"nm": "0x02",
+		"nl": "0x44",
+		"dl": "0x3F"
+	},
+	{
+		"type": "nrpn",
+		"name": "Low Boost",
+		"key": "CLAP",
+		"nm": "0x02",
+		"nl": "0x46",
+		"dl": "0x47"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pan",
+		"key": "CLAP",
+		"nm": "0x02",
+		"nl": "0x47",
+		"dl": "0x48"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pitch",
+		"key": "CLAP",
+		"nm": "0x02",
+		"nl": "0x48",
+		"dl": "0x4A"
+	},
+	{
+		"type": "nrpn",
+		"name": "Level",
+		"key": "CLAP",
+		"nm": "0x02",
+		"nl": "0x4D",
+		"dl": "0x46"
+	},
+	{
+		"type": "nrpn",
+		"name": "Decay",
+		"key": "CLAP",
+		"nm": "0x02",
+		"nl": "0x4E",
+		"dl": "0x49"
+	},
+	{
+		"type": "nrpn",
+		"name": "Input Gain",
+		"key": "A1",
+		"nm": "0x02",
+		"nl": "0x68",
+		"dm": {
+			"from": 0,
+			"to": 100
+		},
+		"dl": "0x68"
+	},
+	{
+		"type": "nrpn",
+		"name": "Low Boost",
+		"key": "A1",
+		"nm": "0x02",
+		"nl": "0x50",
+		"dl": "0x51"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pan",
+		"key": "A1",
+		"nm": "0x02",
+		"nl": "0x51",
+		"dl": "0x52"
+	},
+	{
+		"type": "nrpn",
+		"name": "Level",
+		"key": "A1",
+		"nm": "0x02",
+		"nl": "0x57",
+		"dl": "0x50"
+	},
+	{
+		"type": "nrpn",
+		"name": "Decay",
+		"key": "A1",
+		"nm": "0x02",
+		"nl": "0x58",
+		"dm": {
+			"from": 0,
+			"to": 63
+		},
+		"dl": "0x53"
+	},
+	{
+		"type": "nrpn",
+		"name": "Input Gain",
+		"key": "A2",
+		"nm": "0x02",
+		"nl": "0x69",
+		"dm": {
+			"from": 0,
+			"to": 100
+		},
+		"dl": "0x69"
+	},
+	{
+		"type": "nrpn",
+		"name": "Low Boost",
+		"key": "A2",
+		"nm": "0x02",
+		"nl": "0x5A",
+		"dl": "0x5B"
+	},
+	{
+		"type": "nrpn",
+		"name": "Pan",
+		"key": "A2",
+		"nm": "0x02",
+		"nl": "0x5B",
+		"dl": "0x5C"
+	},
+	{
+		"type": "nrpn",
+		"name": "Level",
+		"key": "A2",
+		"nm": "0x02",
+		"nl": "0x61",
+		"dl": "0x5A"
+	},
+	{
+		"type": "nrpn",
+		"name": "Decay",
+		"key": "A2",
+		"nm": "0x02",
+		"nl": "0x62",
+		"dm": {
+			"from": 0,
+			"to": 63
+		},
+		"dl": "0x5D"
+	},
+	{
+		"type": "nrpn",
+		"name": "Delay Depth",
+		"key": "*",
+		"nm": "0x02",
+		"nl": "0x64",
+		"dl": "0x64"
+	},
+	{
+		"type": "nrpn",
+		"name": "Delay Time",
+		"key": "*",
+		"nm": "0x02",
+		"nl": "0x65",
+		"dl": "0x65"
+	},
+	{
+		"type": "nrpn",
+		"name": "Delay Type",
+		"key": "*",
+		"nm": "0x02",
+		"nl": "0x6B",
+		"dm": {
+			"Off": 0,
+			"Motion Seq": 1,
+			"Tempo Delay": 2
+		},
+		"dl": "0x6B"
+	},
+	{
+		"type": "nrpn",
+		"name": "Cross Mod",
+		"key": "*",
+		"nm": "0x02",
+		"nl": "0x66",
+		"dm": {
+			"Off": 0,
+			"On": 64
+		},
+		"dl": "0x66"
+	},
+	{
+		"type": "nrpn",
+		"name": "Ring Mod",
+		"key": "*",
+		"nm": "0x02",
+		"nl": "0x67",
+		"dm": {
+			"Off": 0,
+			"On": 64
+		},
+		"dl": "0x67"
+	}
+]
+}

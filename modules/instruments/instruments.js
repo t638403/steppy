@@ -5,6 +5,7 @@ Box.Application.addModule('instruments', function(context) {
 	var $,
 		$elem,
 		song,
+		instrType,
 		types;
 
 	return {
@@ -18,7 +19,9 @@ Box.Application.addModule('instruments', function(context) {
 		$ = context.getGlobal('jQuery');
 		$elem = $(context.getElement());
 		song = context.getService('song');
-		types = song.instrument.list().map(function(instr){return song.instrument.type.getByName(instr.type);});
+		instrType = context.getService('instrument-type');
+
+		types = song.instrument.list().map(function(instr){return instrType.getByName(instr.type);});
 
 	}
 

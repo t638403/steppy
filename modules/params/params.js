@@ -7,7 +7,13 @@ Box.Application.addModule('params', function(context) {
 		song;
 
 	return {
-		messages:['gridscroll', 'patternchange', 'paramchange', 'instrumentchange'],
+		messages:[
+			'gridscroll',
+			'patternchange',
+			'paramchange',
+			'instrumentchange',
+			'pianokeypress'
+		],
 		init:init,
 		destroy:destroy,
 		onclick:onclick,
@@ -60,6 +66,7 @@ Box.Application.addModule('params', function(context) {
 				render();
 				break;
 		}
+		context.broadcast('paramedited');
 	}
 
 	function renderParam(p, i) {
